@@ -15,6 +15,8 @@ type Trip = {
   number: string;
   title: string;
   region: string;
+  image: string;
+  imageAlt: string;
   weather: string[];
   mood: string[];
   range: string[];
@@ -42,6 +44,8 @@ const trips: Trip[] = [
     number: "01",
     title: "Strand, Hafen & Tretboot",
     region: "Lac d’Orient · Mesnil-Saint-Père",
+    image: "/activities/lac-tretboot.webp",
+    imageAlt: "Familie am Strand des Lac d’Orient vor einem Tretboot und dem kleinen Hafen",
     weather: ["sun"],
     mood: ["calm", "water"],
     range: ["near", "full"],
@@ -69,6 +73,8 @@ const trips: Trip[] = [
     number: "02",
     title: "Natur & Beaver AquaPark",
     region: "Lac d’Orient · Mesnil-Saint-Père",
+    image: "/activities/beaver-aquapark.webp",
+    imageAlt: "Familie mit Schwimmwesten auf einem aufblasbaren Hindernisparcours im See",
     weather: ["sun"],
     mood: ["active", "water"],
     range: ["near", "full"],
@@ -97,6 +103,8 @@ const trips: Trip[] = [
     number: "03",
     title: "Kletterwald & Strand",
     region: "Grimpobranches · Lac d’Orient",
+    image: "/activities/kletterwald.webp",
+    imageAlt: "Kind und Erwachsener gesichert auf einem Kletterparcours zwischen Bäumen am See",
     weather: ["sun", "dry"],
     mood: ["active", "water"],
     range: ["near", "full"],
@@ -125,6 +133,8 @@ const trips: Trip[] = [
     number: "04",
     title: "Cadoles & Pumptrack",
     region: "Les Riceys · Côte des Bar",
+    image: "/activities/riceys-cadoles.webp",
+    imageAlt: "Kinder auf einem Pumptrack vor einer Cadole und grünen Weinbergen bei Les Riceys",
     weather: ["sun", "dry"],
     mood: ["active", "discover"],
     range: ["full"],
@@ -152,6 +162,8 @@ const trips: Trip[] = [
     number: "05",
     title: "Parc Vix & Weinberge",
     region: "Avize & Cramant · Côte des Blancs",
+    image: "/activities/avize-parc-vix.webp",
+    imageAlt: "Familie zwischen Wasserläufen und weißen Kugelinstallationen im Parc Vix vor Weinbergen",
     weather: ["sun", "dry"],
     mood: ["calm", "discover"],
     range: ["full"],
@@ -178,6 +190,8 @@ const trips: Trip[] = [
     number: "06",
     title: "Dorf-Rallye & Schlosspark",
     region: "Hautvillers & Dormans · Marnetal",
+    image: "/activities/hautvillers-rallye.webp",
+    imageAlt: "Familie bei einer Rätsel-Rallye in einer Gasse von Hautvillers mit Weinbergblick",
     weather: ["sun", "dry"],
     mood: ["active", "discover"],
     range: ["full"],
@@ -204,6 +218,8 @@ const trips: Trip[] = [
     number: "07",
     title: "Ein ganzer Tag Nigloland",
     region: "Dolancourt · Freizeitpark",
+    image: "/activities/nigloland.webp",
+    imageAlt: "Familie vor Achterbahn und Wasserbahn in einem begrünten Freizeitpark",
     weather: ["sun", "dry", "mixed"],
     mood: ["active", "discover"],
     range: ["full"],
@@ -232,6 +248,8 @@ const trips: Trip[] = [
     number: "08",
     title: "Schlossrätsel & alte Spiele",
     region: "Château de Vaux · Fouchères",
+    image: "/activities/chateau-vaux.webp",
+    imageAlt: "Familie löst mit Hinweiskarten ein Rätsel vor dem Château de Vaux",
     weather: ["sun", "dry", "mixed"],
     mood: ["active", "discover"],
     range: ["full"],
@@ -260,6 +278,8 @@ const trips: Trip[] = [
     number: "09",
     title: "Bisons, Elche & Beobachterpfad",
     region: "Espace Faune · Forêt d’Orient",
+    image: "/activities/espace-faune.webp",
+    imageAlt: "Familie beobachtet mit Ferngläsern Bisons und einen Hirsch auf einer großen Waldwiese",
     weather: ["sun", "dry"],
     mood: ["calm", "active", "discover"],
     range: ["near", "full"],
@@ -288,6 +308,8 @@ const trips: Trip[] = [
     number: "10",
     title: "Vitrail-Rätsel & Altstadt",
     region: "Troyes · kurzer Stadt-Ausflug",
+    image: "/activities/troyes-vitrail.webp",
+    imageAlt: "Familie löst mit einem Spieleheft Aufgaben vor farbigen Glasfenstern in Troyes",
     weather: ["sun", "dry", "mixed"],
     mood: ["calm", "discover"],
     range: ["near", "full"],
@@ -316,6 +338,8 @@ const trips: Trip[] = [
     number: "11",
     title: "Mittelalterstadt Provins",
     region: "Provins · UNESCO-Altstadt",
+    image: "/activities/provins.webp",
+    imageAlt: "Familie entdeckt die mittelalterlichen Mauern und den Tour César in Provins",
     weather: ["sun", "dry", "mixed"],
     mood: ["active", "discover"],
     range: ["full"],
@@ -346,6 +370,8 @@ const stopover: Trip = {
   number: "→",
   title: "Zitadelle & Flüsse-Rallye",
   region: "Namur · Stopp auf der An- oder Abreise",
+  image: "/activities/namur-zitadelle.webp",
+  imageAlt: "Familie mit Stadtplan am Aussichtspunkt der Zitadelle über Namur und den beiden Flüssen",
   weather: ["sun", "dry", "mixed"],
   mood: ["calm", "active", "discover"],
   range: ["travel"],
@@ -537,7 +563,10 @@ export default function Home() {
         <div className="idea-links">
           {trips.map((trip) => (
             <button className="idea-jump" type="button" key={trip.id} onClick={() => openIdea(trip.id)}>
-              <span>{trip.number}</span>
+              <span className="idea-image">
+                <img src={trip.image} alt={trip.imageAlt} loading="lazy" />
+                <i>{trip.number}</i>
+              </span>
               <strong>{trip.title}</strong>
               <small>{trip.region}</small>
               <div className="idea-meta" aria-label={`Fahrzeit ${trip.distance.split(" · ")[0]}, Kosten ${trip.cost}`}>
@@ -629,6 +658,10 @@ export default function Home() {
                           {isSaved ? "♥" : "♡"}
                         </button>
                       </div>
+                      <div className="trip-visual">
+                        <img src={trip.image} alt={trip.imageAlt} loading="lazy" />
+                        <span>{trip.region}</span>
+                      </div>
                       <p className="trip-summary">{trip.summary}</p>
                       <div className="fact-row">
                         <div className="fact-card fact-time">
@@ -691,6 +724,7 @@ export default function Home() {
         <div className="stopover-label">Unterwegs-Option · nicht im Ausflugsranking</div>
         <div className="stopover-grid">
           <div className="stopover-intro">
+            <div className="stopover-image"><img src={stopover.image} alt={stopover.imageAlt} loading="lazy" /></div>
             <p className="eyebrow">Für die An- oder Abreise</p>
             <h2 id="stopover-title">Namur als Reisepause.</h2>
             <p>{stopover.summary}</p>

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 
 const templateRoot = new URL("../", import.meta.url);
@@ -23,6 +23,7 @@ test("renders the Urlaubskompass product shell", async () => {
 
   const html = await response.text();
   const pageSource = await readFile(new URL("app/page.tsx", templateRoot), "utf8");
+  const activityImages = await readdir(new URL("public/activities/", templateRoot));
   assert.match(html, /<html[^>]+lang="de"/i);
   assert.match(html, /Urlaubskompass/);
   assert.match(html, /Was passt/);
@@ -36,6 +37,9 @@ test("renders the Urlaubskompass product shell", async () => {
   assert.match(pageSource, /Tripadvisor/);
   assert.match(pageSource, /19\.557/);
   assert.match(pageSource, /kein eigener Eintrag/);
+  assert.match(pageSource, /\/activities\/lac-tretboot\.webp/);
+  assert.match(pageSource, /imageAlt/);
+  assert.equal(activityImages.filter((name) => name.endsWith(".webp")).length, 12);
   assert.match(pageSource, /Route ab Ferienhaus/);
   assert.match(pageSource, /17 Rue du Moulin/);
   assert.equal((pageSource.match(/mapQuery:/g) ?? []).length, 13);
