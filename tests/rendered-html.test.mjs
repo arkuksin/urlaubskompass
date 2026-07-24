@@ -32,6 +32,10 @@ test("renders the Urlaubskompass product shell", async () => {
   assert.match(pageSource, /nicht im Ausflugsranking/);
   assert.match(pageSource, /Ein ganzer Tag Nigloland/);
   assert.match(pageSource, /Mittelalterstadt Provins/);
+  assert.match(pageSource, /Bewertungen für/);
+  assert.match(pageSource, /Tripadvisor/);
+  assert.match(pageSource, /19\.557/);
+  assert.match(pageSource, /kein eigener Eintrag/);
   assert.match(pageSource, /Route ab Ferienhaus/);
   assert.match(pageSource, /17 Rue du Moulin/);
   assert.equal((pageSource.match(/mapQuery:/g) ?? []).length, 13);

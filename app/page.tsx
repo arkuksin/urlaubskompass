@@ -4,6 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 
 type ChoiceKey = "weather" | "mood" | "range";
 
+type PlatformRating = {
+  score: string;
+  count: string;
+  url: string;
+};
+
 type Trip = {
   id: string;
   number: string;
@@ -15,6 +21,11 @@ type Trip = {
   distance: string;
   cost: string;
   mapQuery: string;
+  reviews: {
+    subject: string;
+    google: PlatformRating | null;
+    tripadvisor: PlatformRating | null;
+  };
   summary: string;
   rhythm: string;
   plan: { time: string; title: string; text: string }[];
@@ -22,6 +33,8 @@ type Trip = {
   note?: string;
   officialUrl?: string;
 };
+
+const googleMapsSearch = (query: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 
 const trips: Trip[] = [
   {
@@ -35,6 +48,11 @@ const trips: Trip[] = [
     distance: "37 Min. · 41,8 km ab Ferienhaus",
     cost: "Strand kostenlos",
     mapQuery: "Plage de Mesnil-Saint-Père, Lac d'Orient, France",
+    reviews: {
+      subject: "Plage de Mesnil-Saint-Père",
+      google: { score: "4,5", count: "595", url: googleMapsSearch("Plage de Mesnil-Saint-Père, France") },
+      tripadvisor: { score: "3,5", count: "8", url: "https://www.tripadvisor.com/Attraction_Review-g1720851-d23594395-Reviews-Plage_de_Mesnil_St_Pere-Mesnil_Saint_Pere_Aube_Grand_Est.html" },
+    },
     summary: "Ein echter Ferientag am See: wenig Programm, viel Wasser, Sand und Zeit zum Treibenlassen.",
     rhythm: "Hafen → Picknick → Baden → Tretboot → Eis",
     plan: [
@@ -57,6 +75,11 @@ const trips: Trip[] = [
     distance: "39 Min. · 42,4 km ab Ferienhaus",
     cost: "AquaPark ab 18 € / 1 Std.",
     mapQuery: "Beaver AquaPark, 22 Rue du Lac d'Orient, 10140 Mesnil-Saint-Père, France",
+    reviews: {
+      subject: "Beaver AquaPark",
+      google: { score: "4,5", count: "99", url: googleMapsSearch("Beaver AquaPark Mesnil-Saint-Père") },
+      tripadvisor: { score: "4,2", count: "22", url: "https://www.tripadvisor.com/Attraction_Review-g1720851-d17697696-Reviews-Beaver_Aquapark-Mesnil_Saint_Pere_Aube_Grand_Est.html" },
+    },
     summary: "Erst eine kleine Entdeckertour am See, dann Wassertrampoline, Rutschen und Balancehindernisse.",
     rhythm: "Naturweg → Picknick → Baden → AquaPark",
     plan: [
@@ -80,6 +103,11 @@ const trips: Trip[] = [
     distance: "31 Min. · 36,6 km ab Ferienhaus",
     cost: "Kinder 15 €, Erwachsene 20 €",
     mapQuery: "Grimpobranches Orient, Route du Lac, 10270 Lusigny-sur-Barse, France",
+    reviews: {
+      subject: "Grimpobranches Orient",
+      google: { score: "4,7", count: "1.080", url: googleMapsSearch("Grimpobranches Lusigny-sur-Barse") },
+      tripadvisor: { score: "4,5", count: "45", url: "https://www.tripadvisor.com/Attraction_Review-g1544737-d7033777-Reviews-Grimpobranches-Lusigny_sur_Barse_Aube_Grand_Est.html" },
+    },
     summary: "Ein sportlicher Vormittag zwischen den Bäumen und danach ein ganz freier Nachmittag am See.",
     rhythm: "Klettern → Picknick → Strand → Baden",
     plan: [
@@ -103,6 +131,11 @@ const trips: Trip[] = [
     distance: "1 Std. 1 Min. · 80,3 km ab Ferienhaus",
     cost: "Nahezu kostenlos",
     mapQuery: "Parc du Château Saint-Louis, Les Riceys, France",
+    reviews: {
+      subject: "Circuit des Cadoles & Pumptrack",
+      google: null,
+      tripadvisor: null,
+    },
     summary: "Leichte Weinbergwanderung, versteckte Steinhütten und ein Spielplatz mit Pumptrack als Belohnung.",
     rhythm: "Weinberge → Picknick → Pumptrack → Dorf",
     plan: [
@@ -125,6 +158,11 @@ const trips: Trip[] = [
     distance: "1 Std. 1 Min. · 63,8 km ab Ferienhaus",
     cost: "Fast vollständig kostenlos",
     mapQuery: "Parc Vix, Avize, France",
+    reviews: {
+      subject: "Parc Vix",
+      google: { score: "4,5", count: "26", url: googleMapsSearch("Parc Vix Avize France") },
+      tripadvisor: null,
+    },
     summary: "Weite Ausblicke, Wasserläufe, Klangstationen und ruhige Grand-Cru-Dörfer in einem entspannten Tag.",
     rhythm: "Parc Vix → Picknick → Avize → Cramant",
     plan: [
@@ -146,6 +184,11 @@ const trips: Trip[] = [
     distance: "1 Std. 12 Min. · 96,1 km ab Ferienhaus",
     cost: "Meist kostenlos · Rallye ca. 5 €",
     mapQuery: "Hautvillers, France",
+    reviews: {
+      subject: "Abteikirche Hautvillers",
+      google: { score: "4,6", count: "31", url: googleMapsSearch("Église Saint-Sindulphe Hautvillers") },
+      tripadvisor: { score: "4,1", count: "244", url: "https://www.tripadvisor.com/Attraction_Review-g2209359-d6825422-Reviews-Abbaye_Saint_Pierre_d_Hautvillers-Hautvillers_Marne_Grand_Est.html" },
+    },
     summary: "Historische Gassen und Weinberge am Vormittag, danach viel Platz zum Spielen und Durchatmen.",
     rhythm: "Rallye → Reben → Schlosspark → Mémorial",
     plan: [
@@ -167,6 +210,11 @@ const trips: Trip[] = [
     distance: "53 Min. · 62,6 km ab Ferienhaus",
     cost: "Ab 34 € p. P. online",
     mapQuery: "Nigloland, D619, 10200 Dolancourt, France",
+    reviews: {
+      subject: "Nigloland",
+      google: { score: "4,6", count: "19.557", url: googleMapsSearch("Nigloland Dolancourt") },
+      tripadvisor: { score: "4,3", count: "2.168", url: "https://www.tripadvisor.com/Attraction_Review-g672831-d2243995-Reviews-Nigloland-Dolancourt_Aube_Grand_Est.html" },
+    },
     summary: "Achterbahnen, Wasserfahrten und ruhigere Familienattraktionen – ein großer Urlaubstag ohne weiteres Programm.",
     rhythm: "Früh starten → Lieblingsfahrten → Picknickpause → zweite Runde",
     plan: [
@@ -190,6 +238,11 @@ const trips: Trip[] = [
     distance: "45 Min. · 48,5 km ab Ferienhaus",
     cost: "Erw. 10 € · Kinder 8 €",
     mapQuery: "Château de Vaux, 10260 Fouchères, France",
+    reviews: {
+      subject: "Château de Vaux",
+      google: { score: "4,4", count: "1.034", url: googleMapsSearch("Château de Vaux Fouchères") },
+      tripadvisor: { score: "4,4", count: "114", url: "https://www.tripadvisor.com/Attraction_Review-g1370426-d8595745-Reviews-Chateau_De_Vaux-Foucheres_Aube_Grand_Est.html" },
+    },
     summary: "Ein Schlossbesuch, der sich wie ein gemeinsames Detektivspiel anfühlt – mit Rätseln in 20 Räumen und Spielen im Park.",
     rhythm: "Schloss-Ermittlung → Picknick → historische Spiele → Parkrunde",
     plan: [
@@ -213,6 +266,11 @@ const trips: Trip[] = [
     distance: "40 Min. · 37,4 km ab Ferienhaus",
     cost: "Erw. 7 € · Kinder 5 €",
     mapQuery: "Espace Faune de la Forêt d'Orient, Chemin du Gaty, 10220 Piney, France",
+    reviews: {
+      subject: "Espace Faune",
+      google: { score: "4,3", count: "300", url: googleMapsSearch("Espace Faune de la Forêt d'Orient Piney") },
+      tripadvisor: { score: "3,9", count: "8", url: "https://www.tripadvisor.com/Attraction_Review-g1055964-d21209907-Reviews-Espace_Faune_de_la_Foret_d_Orient-Piney_Aube_Grand_Est.html" },
+    },
     summary: "Auf einem 2,5-km-Pfad leben Bisons, Elche, Auerochsen und Wildpferde in großen, naturnahen Gehegen.",
     rhythm: "Tierpfad → Beobachtungsposten → Picknick → See oder Maison du Parc",
     plan: [
@@ -236,6 +294,11 @@ const trips: Trip[] = [
     distance: "24 Min. · 24,8 km ab Ferienhaus",
     cost: "Grundprogramm kostenlos",
     mapQuery: "Cité du Vitrail, 31 Quai des Comtes de Champagne, 10000 Troyes, France",
+    reviews: {
+      subject: "Cité du Vitrail",
+      google: { score: "4,6", count: "749", url: googleMapsSearch("Cité du Vitrail Troyes") },
+      tripadvisor: { score: "4,0", count: "152", url: "https://www.tripadvisor.com/Attraction_Review-g187138-d4545183-Reviews-Cite_du_Vitrail-Troyes_Aube_Grand_Est.html" },
+    },
     summary: "Ein unkomplizierter Mix aus kostenlosem Familienrätsel, leuchtenden Glasfenstern und Troyes’ verwinkelter Altstadt.",
     rhythm: "Cité du Vitrail → Altstadt-Picknick → Ruelle des Chats → Park",
     plan: [
@@ -259,6 +322,11 @@ const trips: Trip[] = [
     distance: "1 Std. 8 Min. · 72,9 km ab Ferienhaus",
     cost: "Altstadt frei · Familienpass 49 € online",
     mapQuery: "Office de Tourisme de Provins, Chemin de Villecran, 77160 Provins, France",
+    reviews: {
+      subject: "Tour César",
+      google: { score: "4,5", count: "4.543", url: googleMapsSearch("Tour César Provins") },
+      tripadvisor: { score: "4,1", count: "771", url: "https://www.tripadvisor.com/Attraction_Review-g608778-d2323437-Reviews-La_Tour_Cesar-Provins_Seine_et_Marne_Ile_de_France.html" },
+    },
     summary: "Türme, Mauern, unterirdische Gänge und mittelalterliche Gassen machen den längsten neuen Ausflug besonders abwechslungsreich.",
     rhythm: "Stadtmauer → Tour César → Picknick → Unterwelt oder freie Gassen",
     plan: [
@@ -284,6 +352,11 @@ const stopover: Trip = {
   distance: "Etwa 3 Std. Aufenthalt",
   cost: "Grundprogramm kostenlos",
   mapQuery: "Citadelle de Namur, Route Merveilleuse, Namur, Belgium",
+  reviews: {
+    subject: "Zitadelle von Namur",
+    google: { score: "4,5", count: "17.308", url: googleMapsSearch("Citadelle de Namur") },
+    tripadvisor: { score: "4,3", count: "1.249", url: "https://www.tripadvisor.com/Attraction_Review-g188663-d536242-Reviews-Citadelle_Citadel-Namur_The_Ardennes_Wallonia.html" },
+  },
   summary: "Kein Ausflug ab dem Ferienhaus: Namur ist eine optionale Pause auf der langen Reisestrecke – mit Bewegung, Aussicht und einem klaren Zeitrahmen.",
   rhythm: "Le Grognon → Altstadt → Zitadelle → weiterfahren",
   plan: [
@@ -343,6 +416,34 @@ function scoreTrip(trip: Trip, choices: typeof initialChoices) {
   const mood = trip.mood.includes(choices.mood) ? 5 : 0;
   const range = choices.range === "any" || trip.range.includes(choices.range) ? 4 : 0;
   return weather + mood + range;
+}
+
+function ReviewScores({ trip, compact = false }: { trip: Trip; compact?: boolean }) {
+  const platforms = [
+    { name: "Google", rating: trip.reviews.google },
+    { name: "Tripadvisor", rating: trip.reviews.tripadvisor },
+  ];
+
+  return (
+    <div className={`review-scores ${compact ? "compact" : ""}`} aria-label={`Bewertungen für ${trip.reviews.subject}`}>
+      <p className="review-subject">{compact ? "Bewertet:" : "Bewertungen für"} <b>{trip.reviews.subject}</b>{!compact && <span>Stand 24.07.2026</span>}</p>
+      <div className="review-platforms">
+        {platforms.map(({ name, rating }) => {
+          const content = rating ? (
+            <><span>{name}</span><strong><i aria-hidden="true">★</i> {rating.score}</strong><small>{rating.count} Bewertungen</small></>
+          ) : (
+            <><span>{name}</span><strong>—</strong><small>kein eigener Eintrag</small></>
+          );
+
+          return compact || !rating ? (
+            <div className={`review-chip ${rating ? "" : "unavailable"}`} key={name}>{content}</div>
+          ) : (
+            <a className="review-chip" href={rating.url} target="_blank" rel="noreferrer" key={name}>{content}</a>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 export default function Home() {
@@ -443,6 +544,7 @@ export default function Home() {
                 <p className="idea-time"><span>Fahrzeit</span><b>{trip.distance.split(" · ")[0]}</b></p>
                 <p className="idea-price"><span>Kosten</span><b>{trip.cost}</b></p>
               </div>
+              <ReviewScores trip={trip} compact />
             </button>
           ))}
         </div>
@@ -546,6 +648,7 @@ export default function Home() {
                           Route ab Ferienhaus ↗
                         </a>
                       </div>
+                      <ReviewScores trip={trip} />
                       <p className="rhythm"><b>So fließt der Tag</b>{trip.rhythm}</p>
                       <button className="details-button" type="button" onClick={() => setOpenTrip(isOpen ? null : trip.id)} aria-expanded={isOpen}>
                         {isOpen ? "Tagesplan schließen" : "Tagesplan öffnen"}<span aria-hidden="true">{isOpen ? "−" : "+"}</span>
@@ -595,6 +698,7 @@ export default function Home() {
               <div className="fact-card fact-time"><small>Zeit vor Ort</small><strong>{stopover.distance}</strong></div>
               <div className="fact-card fact-cost"><small>Kosten</small><strong>{stopover.cost}</strong></div>
             </div>
+            <ReviewScores trip={stopover} />
             <div className="stopover-links">
               <a
                 className="map-link"
@@ -621,7 +725,7 @@ export default function Home() {
       <section className="footer-note">
         <p className="eyebrow">Ein kleiner Urlaubsgrundsatz</p>
         <blockquote>„Eine schöne Hauptidee und genug Zeit zum Treibenlassen.“</blockquote>
-        <p>Sechs Ausflüge und der Reisestopp basieren auf euren Urlaubsunterlagen; fünf weitere Ausflüge wurden passend ergänzt. Die Fahrzeiten wurden am 24.07.2026 für Autofahrten ab dem Ferienhaus ermittelt und können je nach Verkehr abweichen. Kosten und Öffnungszeiten bitte kurz vor der Abfahrt prüfen.</p>
+        <p>Sechs Ausflüge und der Reisestopp basieren auf euren Urlaubsunterlagen; fünf weitere Ausflüge wurden passend ergänzt. Fahrzeiten sowie Google- und Tripadvisor-Bewertungen wurden am 24.07.2026 geprüft und können sich ändern. Kosten und Öffnungszeiten bitte kurz vor der Abfahrt prüfen.</p>
       </section>
     </main>
   );
