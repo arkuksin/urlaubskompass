@@ -27,9 +27,13 @@ test("renders the Urlaubskompass product shell", async () => {
   assert.match(html, /Urlaubskompass/);
   assert.match(html, /Was passt/);
   assert.match(html, /Wie sieht es draußen aus/);
-  assert.match(html, /Alle sieben Ideen/);
+  assert.match(html, /Alle elf Ausflüge/);
+  assert.match(pageSource, /Namur als Reisepause/);
+  assert.match(pageSource, /nicht im Ausflugsranking/);
+  assert.match(pageSource, /Ein ganzer Tag Nigloland/);
+  assert.match(pageSource, /Mittelalterstadt Provins/);
   assert.match(pageSource, /Route ab Ferienhaus/);
   assert.match(pageSource, /17 Rue du Moulin/);
-  assert.equal((pageSource.match(/mapQuery:/g) ?? []).length, 8);
+  assert.equal((pageSource.match(/mapQuery:/g) ?? []).length, 13);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });

@@ -157,29 +157,145 @@ const trips: Trip[] = [
     pack: "Picknick, Wasser, bequeme Schuhe, kleine Rätselstifte",
   },
   {
-    id: "namur",
+    id: "nigloland",
     number: "07",
-    title: "Zitadelle & Flüsse-Rallye",
-    region: "Namur · Reisetag in Belgien",
+    title: "Ein ganzer Tag Nigloland",
+    region: "Dolancourt · Freizeitpark",
     weather: ["sun", "dry", "mixed"],
-    mood: ["calm", "active", "discover"],
-    range: ["travel"],
-    distance: "3 Std. 3 Min. · 289 km ab Ferienhaus",
-    cost: "Grundprogramm kostenlos",
-    mapQuery: "Citadelle de Namur, Route Merveilleuse, Namur, Belgium",
-    summary: "Festungsmauern, zwei Flüsse und kleine Suchaufgaben machen aus dem Zwischenstopp ein echtes Abenteuer.",
-    rhythm: "Le Grognon → Altstadt → Zitadelle → Picknick",
+    mood: ["active", "discover"],
+    range: ["full"],
+    distance: "53 Min. · 62,6 km ab Ferienhaus",
+    cost: "Ab 34 € p. P. online",
+    mapQuery: "Nigloland, D619, 10200 Dolancourt, France",
+    summary: "Achterbahnen, Wasserfahrten und ruhigere Familienattraktionen – ein großer Urlaubstag ohne weiteres Programm.",
+    rhythm: "Früh starten → Lieblingsfahrten → Picknickpause → zweite Runde",
     plan: [
-      { time: "20 Min.", title: "Zwei Flüsse", text: "Am Grognon den Zusammenfluss von Sambre und Maas entdecken und Boote beobachten." },
-      { time: "45 Min.", title: "Stadt-Rallye", text: "Belfried, besondere Gassen und Kunstfiguren in der Altstadt suchen." },
-      { time: "60–90 Min.", title: "Zitadelle", text: "Mauern, alte Tore und Aussichtspunkte frei erkunden; der Fußweg hinauf ist steil." },
-      { time: "Optional", title: "Schlechtwetter-Puffer", text: "Terra Nova mit Kinder-Audioguide besuchen oder Touristenzug beziehungsweise Seilbahn wählen." },
+      { time: "Vormittag", title: "Die Favoriten zuerst", text: "Direkt zu den wichtigsten Fahrgeschäften gehen, solange Wege und Wartezeiten noch kurz sind." },
+      { time: "Mittag", title: "Tempo herausnehmen", text: "Picknick oder Restaurantpause einplanen und gemeinsam die zweite Tageshälfte auswählen." },
+      { time: "Nachmittag", title: "Freie zweite Runde", text: "Wasserfahrten, Shows und alles nachholen, das morgens auf der Wunschliste gelandet ist." },
+      { time: "Ausklang", title: "Ohne Extra-Stopp heim", text: "Der Park ist genug für einen Tag – nach der letzten Runde direkt zum Ferienhaus zurückfahren." },
     ],
-    pack: "Bequeme Schuhe, Wasser, Snack; bei Regen eine leichte Jacke",
-    note: "Terra Nova: Erwachsene 6 €, Kinder 6–18 Jahre 5 €; deutscher Kinder-Audioguide inklusive.",
-    officialUrl: "https://billetterie.citadelle.namur.be/events/le-petit-train-copy",
+    pack: "Bequeme Schuhe, Sonnenschutz, Wasser, leichte Regenjacke",
+    note: "Der günstigste datierte Tarif gilt bei Onlinekauf mindestens acht Tage vorher und nach Verfügbarkeit; Kinder unter 1 m sind frei.",
+    officialUrl: "https://www.nigloland.fr/toutes-nos-offres",
+  },
+  {
+    id: "vaux",
+    number: "08",
+    title: "Schlossrätsel & alte Spiele",
+    region: "Château de Vaux · Fouchères",
+    weather: ["sun", "dry", "mixed"],
+    mood: ["active", "discover"],
+    range: ["full"],
+    distance: "45 Min. · 48,5 km ab Ferienhaus",
+    cost: "Erw. 10 € · Kinder 8 €",
+    mapQuery: "Château de Vaux, 10260 Fouchères, France",
+    summary: "Ein Schlossbesuch, der sich wie ein gemeinsames Detektivspiel anfühlt – mit Rätseln in 20 Räumen und Spielen im Park.",
+    rhythm: "Schloss-Ermittlung → Picknick → historische Spiele → Parkrunde",
+    plan: [
+      { time: "Vormittag", title: "Vidocqs Spur aufnehmen", text: "Als Team durch die Schlossräume gehen, Hinweise kombinieren und das Geheimnis lösen." },
+      { time: "Mittag", title: "Picknick am Schloss", text: "Draußen Pause machen und die besten Verdächtigungen miteinander vergleichen." },
+      { time: "Nachmittag", title: "Spiele im Park", text: "Historische Holzspiele ausprobieren, den Spielplatz nutzen und das Gelände erkunden." },
+      { time: "Ausklang", title: "Kleine Dorfrunde", text: "Wenn noch Energie da ist, kurz durch Fouchères spazieren; sonst entspannt zurückfahren." },
+    ],
+    pack: "Picknick, Wasser, bequeme Schuhe, leichte Jacke für die Schlossräume",
+    note: "Das Ermittlerspiel ist für Teams von zwei bis sechs Personen angelegt und damit ideal für euch fünf.",
+    officialUrl: "https://www.chateau-vaux.com/le-chateau/preparer-ma-visite/tarifs/",
+  },
+  {
+    id: "espace-faune",
+    number: "09",
+    title: "Bisons, Elche & Beobachterpfad",
+    region: "Espace Faune · Forêt d’Orient",
+    weather: ["sun", "dry"],
+    mood: ["calm", "active", "discover"],
+    range: ["near", "full"],
+    distance: "40 Min. · 37,4 km ab Ferienhaus",
+    cost: "Erw. 7 € · Kinder 5 €",
+    mapQuery: "Espace Faune de la Forêt d'Orient, Chemin du Gaty, 10220 Piney, France",
+    summary: "Auf einem 2,5-km-Pfad leben Bisons, Elche, Auerochsen und Wildpferde in großen, naturnahen Gehegen.",
+    rhythm: "Tierpfad → Beobachtungsposten → Picknick → See oder Maison du Parc",
+    plan: [
+      { time: "Vormittag", title: "Leise auf Tier-Suche", text: "Den Rundweg langsam gehen und an den Beobachtungsposten nach großen Pflanzenfressern Ausschau halten." },
+      { time: "Mittag", title: "Picknick im Grünen", text: "Die vorhandenen Picknicktische nutzen und Fernglas-Funde miteinander vergleichen." },
+      { time: "Nachmittag", title: "Tag flexibel verlängern", text: "Je nach Energie zur Maison du Parc oder noch kurz an den nahen Lac d’Orient wechseln." },
+      { time: "Ausklang", title: "Lieblingstier küren", text: "Vor der Rückfahrt jedes Familienmitglied seinen besten Fund wählen lassen." },
+    ],
+    pack: "Fernglas, Wasser, Picknick, feste Schuhe, Mückenschutz",
+    note: "Freie Besichtigung etwa 1½ Stunden; Haustiere sind auf dem Gelände nicht erlaubt.",
+    officialUrl: "https://www.pnr-foret-orient.fr/pratique/centre-de-ressources/brochure-de-lespace-faune-de-la-foret-dorient-2026/",
+  },
+  {
+    id: "troyes",
+    number: "10",
+    title: "Vitrail-Rätsel & Altstadt",
+    region: "Troyes · kurzer Stadt-Ausflug",
+    weather: ["sun", "dry", "mixed"],
+    mood: ["calm", "discover"],
+    range: ["near", "full"],
+    distance: "24 Min. · 24,8 km ab Ferienhaus",
+    cost: "Grundprogramm kostenlos",
+    mapQuery: "Cité du Vitrail, 31 Quai des Comtes de Champagne, 10000 Troyes, France",
+    summary: "Ein unkomplizierter Mix aus kostenlosem Familienrätsel, leuchtenden Glasfenstern und Troyes’ verwinkelter Altstadt.",
+    rhythm: "Cité du Vitrail → Altstadt-Picknick → Ruelle des Chats → Park",
+    plan: [
+      { time: "Vormittag", title: "Licht und Rätsel", text: "In der Cité du Vitrail das kostenlose Spieleheft für 6–12-Jährige holen und gemeinsam die Details suchen." },
+      { time: "Mittag", title: "In der Altstadt", text: "Zwischen Fachwerkhäusern essen und anschließend ohne festen Kurs durch das historische Zentrum ziehen." },
+      { time: "Nachmittag", title: "Kleine Stadt-Challenge", text: "Ruelle des Chats, Herz von Troyes und die schiefsten Häuser auf Familienfotos sammeln." },
+      { time: "Ausklang", title: "Grün oder Eis", text: "Je nach Laune im Parc des Moulins auslaufen oder in der Stadt ein Eis holen." },
+    ],
+    pack: "Bequeme Schuhe, kleine Stifte, Wasser; bei Sonne Picknickdecke",
+    note: "Die Familienmaterialien im permanenten Rundgang sind kostenlos; Sonderausstellungen und vermittelte Workshops können extra kosten.",
+    officialUrl: "https://cite-vitrail.fr/fr/famille",
+  },
+  {
+    id: "provins",
+    number: "11",
+    title: "Mittelalterstadt Provins",
+    region: "Provins · UNESCO-Altstadt",
+    weather: ["sun", "dry", "mixed"],
+    mood: ["active", "discover"],
+    range: ["full"],
+    distance: "1 Std. 8 Min. · 72,9 km ab Ferienhaus",
+    cost: "Altstadt frei · Familienpass 49 € online",
+    mapQuery: "Office de Tourisme de Provins, Chemin de Villecran, 77160 Provins, France",
+    summary: "Türme, Mauern, unterirdische Gänge und mittelalterliche Gassen machen den längsten neuen Ausflug besonders abwechslungsreich.",
+    rhythm: "Stadtmauer → Tour César → Picknick → Unterwelt oder freie Gassen",
+    plan: [
+      { time: "Vormittag", title: "Obere Stadt", text: "An den Mauern starten, zur Tour César gehen und die mittelalterliche Silhouette von oben erleben." },
+      { time: "Mittag", title: "Picknick mit Geschichte", text: "Im Grünen an der Stadtmauer pausieren und danach gemeinsam einen zweiten Schwerpunkt wählen." },
+      { time: "Nachmittag", title: "Fünf Monumente oder freie Runde", text: "Mit dem Pass etwa Untergrundgänge und Zehntscheune besuchen – oder kostenlos weiter durch die Altstadt ziehen." },
+      { time: "Ausklang", title: "Ein letzter Mauerblick", text: "Vor der Rückfahrt eine ruhige Runde entlang der Befestigung machen." },
+    ],
+    pack: "Feste Schuhe, Picknick, Wasser, leichte Jacke für unterirdische Räume",
+    note: "Der Familienpass gilt für zwei Erwachsene und bis zu fünf Kinder von 4–12 Jahren; einzelne Termine können ausgenommen sein.",
+    officialUrl: "https://provins.net/le-pass-provins/",
   },
 ];
+
+const stopover: Trip = {
+  id: "namur",
+  number: "→",
+  title: "Zitadelle & Flüsse-Rallye",
+  region: "Namur · Stopp auf der An- oder Abreise",
+  weather: ["sun", "dry", "mixed"],
+  mood: ["calm", "active", "discover"],
+  range: ["travel"],
+  distance: "Etwa 3 Std. Aufenthalt",
+  cost: "Grundprogramm kostenlos",
+  mapQuery: "Citadelle de Namur, Route Merveilleuse, Namur, Belgium",
+  summary: "Kein Ausflug ab dem Ferienhaus: Namur ist eine optionale Pause auf der langen Reisestrecke – mit Bewegung, Aussicht und einem klaren Zeitrahmen.",
+  rhythm: "Le Grognon → Altstadt → Zitadelle → weiterfahren",
+  plan: [
+    { time: "20 Min.", title: "Zwei Flüsse", text: "Am Grognon den Zusammenfluss von Sambre und Maas entdecken und Boote beobachten." },
+    { time: "45 Min.", title: "Stadt-Rallye", text: "Belfried, besondere Gassen und Kunstfiguren in der Altstadt suchen." },
+    { time: "60–90 Min.", title: "Zitadelle", text: "Mauern, alte Tore und Aussichtspunkte frei erkunden; der Fußweg hinauf ist steil." },
+    { time: "Optional", title: "Schlechtwetter-Puffer", text: "Terra Nova mit Kinder-Audioguide besuchen oder Touristenzug beziehungsweise Seilbahn wählen." },
+  ],
+  pack: "Bequeme Schuhe, Wasser, Snack; bei Regen eine leichte Jacke",
+  note: "Die genaue Einbindung hängt von eurer Anreiseroute ab; den Stopp deshalb vor Abfahrt in der Gesamtroute prüfen.",
+  officialUrl: "https://citadelle.namur.be/",
+};
 
 const questions: { key: ChoiceKey; kicker: string; title: string; hint: string; options: { value: string; label: string; detail: string }[] }[] = [
   {
@@ -212,9 +328,8 @@ const questions: { key: ChoiceKey; kicker: string; title: string; hint: string; 
     title: "Wie groß darf der Tag werden?",
     hint: "Der Weg gehört zum Urlaub – aber nicht an jedem Tag gleich viel.",
     options: [
-      { value: "near", label: "Nah & unkompliziert", detail: "Etwa 30 bis 40 Minuten ab Ferienhaus" },
+      { value: "near", label: "Nah & unkompliziert", detail: "Etwa 25 bis 45 Minuten ab Ferienhaus" },
       { value: "full", label: "Ein richtiger Tagesausflug", detail: "Bis etwa 1½ Stunden Anfahrt" },
-      { value: "travel", label: "Zwischenstopp auf Reise", detail: "Drei abwechslungsreiche Stunden in Namur" },
       { value: "any", label: "Entfernung ist egal", detail: "Die Stimmung entscheidet" },
     ],
   },
@@ -227,8 +342,7 @@ function scoreTrip(trip: Trip, choices: typeof initialChoices) {
   const weather = choices.weather === "any" || trip.weather.includes(choices.weather) ? 4 : 0;
   const mood = trip.mood.includes(choices.mood) ? 5 : 0;
   const range = choices.range === "any" || trip.range.includes(choices.range) ? 4 : 0;
-  const mixedBonus = choices.weather === "mixed" && trip.id === "namur" ? 2 : 0;
-  return weather + mood + range + mixedBonus;
+  return weather + mood + range;
 }
 
 export default function Home() {
@@ -293,7 +407,7 @@ export default function Home() {
           <span>Urlaubskompass</span>
         </a>
         <div className="header-meta">
-          <span>7 Ideen</span>
+          <span>11 Ausflüge + 1 Reisestopp</span>
           <span className="meta-dot" aria-hidden="true" />
           <span>ab eurem Ferienhaus</span>
         </div>
@@ -301,13 +415,13 @@ export default function Home() {
 
       <section className="hero" id="start">
         <div className="hero-copy">
-          <p className="eyebrow">Champagne · Lac d’Orient · Namur</p>
+          <p className="eyebrow">Champagne · Lac d’Orient · Aube</p>
           <h1>Was passt <em>heute</em> zu euch?</h1>
           <p className="hero-intro">Drei kurze Fragen. Danach seht ihr nur die Ausflüge, die sich für diesen Tag wirklich gut anfühlen.</p>
         </div>
         <div className="sun-orbit" aria-hidden="true">
-          <span className="sun-core">7</span>
-          <span className="orbit-label">gesammelte<br />Tagesideen</span>
+          <span className="sun-core">11</span>
+          <span className="orbit-label">echte<br />Tagesausflüge</span>
         </div>
       </section>
 
@@ -315,7 +429,7 @@ export default function Home() {
         <div className="all-ideas-header">
           <div>
             <p className="eyebrow">Direkter Einstieg</p>
-            <h2 id="all-ideas-title">Alle sieben Ideen</h2>
+            <h2 id="all-ideas-title">Alle elf Ausflüge</h2>
           </div>
           <p>Schon entschieden? Springt direkt zum Tagesplan. Alle Fahrzeiten starten an eurem Ferienhaus in Saint-Remy-sous-Barbuise.</p>
         </div>
@@ -462,7 +576,7 @@ export default function Home() {
 
             <div className="show-all-row">
               <button className="secondary-button" type="button" onClick={() => setShowAll((current) => !current)}>
-                {showAll ? "Nur Top 3 anzeigen" : "Alle 7 Ideen ansehen"}
+                {showAll ? "Nur Top 3 anzeigen" : "Alle 11 Ausflüge ansehen"}
               </button>
               <span>{saved.length ? `${saved.length} Favorit${saved.length > 1 ? "en" : ""} gemerkt` : "Noch nichts gemerkt"}</span>
             </div>
@@ -470,10 +584,44 @@ export default function Home() {
         )}
       </section>
 
+      <section className="stopover-section" aria-labelledby="stopover-title">
+        <div className="stopover-label">Unterwegs-Option · nicht im Ausflugsranking</div>
+        <div className="stopover-grid">
+          <div className="stopover-intro">
+            <p className="eyebrow">Für die An- oder Abreise</p>
+            <h2 id="stopover-title">Namur als Reisepause.</h2>
+            <p>{stopover.summary}</p>
+            <div className="stopover-facts">
+              <div className="fact-card fact-time"><small>Zeit vor Ort</small><strong>{stopover.distance}</strong></div>
+              <div className="fact-card fact-cost"><small>Kosten</small><strong>{stopover.cost}</strong></div>
+            </div>
+            <div className="stopover-links">
+              <a
+                className="map-link"
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(stopover.mapQuery)}`}
+                target="_blank"
+                rel="noreferrer"
+              >Zitadelle in Google Maps ↗</a>
+              {stopover.officialUrl && <a href={stopover.officialUrl} target="_blank" rel="noreferrer">Offizielle Informationen ↗</a>}
+            </div>
+          </div>
+          <div className="stopover-plan">
+            <p className="rhythm"><b>So passt der Stopp dazwischen</b>{stopover.rhythm}</p>
+            {stopover.plan.map((item) => (
+              <div className="stopover-step" key={`stopover-${item.time}`}>
+                <span>{item.time}</span>
+                <div><strong>{item.title}</strong><p>{item.text}</p></div>
+              </div>
+            ))}
+            <p className="stopover-note"><b>Vorher prüfen:</b> {stopover.note}</p>
+          </div>
+        </div>
+      </section>
+
       <section className="footer-note">
         <p className="eyebrow">Ein kleiner Urlaubsgrundsatz</p>
         <blockquote>„Eine schöne Hauptidee und genug Zeit zum Treibenlassen.“</blockquote>
-        <p>Alle Vorschläge basieren auf euren sieben Urlaubsunterlagen. Die Fahrzeiten wurden am 24.07.2026 für Autofahrten ab dem Ferienhaus ermittelt und können je nach Verkehr abweichen. Kosten und Öffnungszeiten bitte kurz vor der Abfahrt prüfen.</p>
+        <p>Sechs Ausflüge und der Reisestopp basieren auf euren Urlaubsunterlagen; fünf weitere Ausflüge wurden passend ergänzt. Die Fahrzeiten wurden am 24.07.2026 für Autofahrten ab dem Ferienhaus ermittelt und können je nach Verkehr abweichen. Kosten und Öffnungszeiten bitte kurz vor der Abfahrt prüfen.</p>
       </section>
     </main>
   );
