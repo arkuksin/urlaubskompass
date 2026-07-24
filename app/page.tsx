@@ -325,6 +325,10 @@ export default function Home() {
               <span>{trip.number}</span>
               <strong>{trip.title}</strong>
               <small>{trip.region}</small>
+              <div className="idea-meta" aria-label={`Fahrzeit ${trip.distance.split(" · ")[0]}, Kosten ${trip.cost}`}>
+                <p className="idea-time"><span>Fahrzeit</span><b>{trip.distance.split(" · ")[0]}</b></p>
+                <p className="idea-price"><span>Kosten</span><b>{trip.cost}</b></p>
+              </div>
             </button>
           ))}
         </div>
@@ -411,8 +415,14 @@ export default function Home() {
                       </div>
                       <p className="trip-summary">{trip.summary}</p>
                       <div className="fact-row">
-                        <span>{trip.distance}</span>
-                        <span>{trip.cost}</span>
+                        <div className="fact-card fact-time">
+                          <small>Fahrzeit ab Ferienhaus</small>
+                          <strong>{trip.distance}</strong>
+                        </div>
+                        <div className="fact-card fact-cost">
+                          <small>Kosten</small>
+                          <strong>{trip.cost}</strong>
+                        </div>
                         <a
                           className="map-link"
                           href={`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(holidayHome)}&destination=${encodeURIComponent(trip.mapQuery)}&travelmode=driving`}
