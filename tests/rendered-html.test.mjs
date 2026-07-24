@@ -28,7 +28,8 @@ test("renders the Urlaubskompass product shell", async () => {
   assert.match(html, /Was passt/);
   assert.match(html, /Wie sieht es draußen aus/);
   assert.match(html, /Alle sieben Ideen/);
-  assert.match(pageSource, /In Google Maps öffnen/);
+  assert.match(pageSource, /Route ab Ferienhaus/);
+  assert.match(pageSource, /17 Rue du Moulin/);
   assert.equal((pageSource.match(/mapQuery:/g) ?? []).length, 8);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });

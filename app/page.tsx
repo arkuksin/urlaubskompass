@@ -32,7 +32,7 @@ const trips: Trip[] = [
     weather: ["sun"],
     mood: ["calm", "water"],
     range: ["near", "full"],
-    distance: "ca. 30 Min. ab Troyes",
+    distance: "37 Min. · 41,8 km ab Ferienhaus",
     cost: "Strand kostenlos",
     mapQuery: "Plage de Mesnil-Saint-Père, Lac d'Orient, France",
     summary: "Ein echter Ferientag am See: wenig Programm, viel Wasser, Sand und Zeit zum Treibenlassen.",
@@ -41,7 +41,7 @@ const trips: Trip[] = [
       { time: "Vormittag", title: "Ankommen", text: "Am Übergang von Sand und Rasen eine Basis einrichten und gemütlich zum Hafen spazieren." },
       { time: "Mittag", title: "Seezeit", text: "Direkt am Wasser picknicken, danach lange baden, spielen oder einfach ausruhen." },
       { time: "Nachmittag", title: "Aufs Wasser", text: "Ein Tretboot mieten; für fünf Personen vorher nach einem größeren Modell fragen." },
-      { time: "Ausklang", title: "Langsam zurück", text: "Ein letztes Bad oder ein Eis am Hafen, dann entspannt nach Troyes fahren." },
+      { time: "Ausklang", title: "Langsam zurück", text: "Ein letztes Bad oder ein Eis am Hafen, dann entspannt zum Ferienhaus zurückfahren." },
     ],
     pack: "Badesachen, Picknickdecke, Sonnenschutz, Ball oder Frisbee",
     note: "Tretbootpreis und Bootsgröße bitte vor Ort prüfen.",
@@ -54,7 +54,7 @@ const trips: Trip[] = [
     weather: ["sun"],
     mood: ["active", "water"],
     range: ["near", "full"],
-    distance: "ca. 30 Min. ab Troyes",
+    distance: "39 Min. · 42,4 km ab Ferienhaus",
     cost: "AquaPark ab 18 € / 1 Std.",
     mapQuery: "Beaver AquaPark, 22 Rue du Lac d'Orient, 10140 Mesnil-Saint-Père, France",
     summary: "Erst eine kleine Entdeckertour am See, dann Wassertrampoline, Rutschen und Balancehindernisse.",
@@ -77,7 +77,7 @@ const trips: Trip[] = [
     weather: ["sun", "dry"],
     mood: ["active", "water"],
     range: ["near", "full"],
-    distance: "ca. 30 Min. ab Troyes",
+    distance: "31 Min. · 36,6 km ab Ferienhaus",
     cost: "Kinder 15 €, Erwachsene 20 €",
     mapQuery: "Grimpobranches Orient, Route du Lac, 10270 Lusigny-sur-Barse, France",
     summary: "Ein sportlicher Vormittag zwischen den Bäumen und danach ein ganz freier Nachmittag am See.",
@@ -100,7 +100,7 @@ const trips: Trip[] = [
     weather: ["sun", "dry"],
     mood: ["active", "discover"],
     range: ["full"],
-    distance: "ca. 50–55 km ab Troyes",
+    distance: "1 Std. 1 Min. · 80,3 km ab Ferienhaus",
     cost: "Nahezu kostenlos",
     mapQuery: "Parc du Château Saint-Louis, Les Riceys, France",
     summary: "Leichte Weinbergwanderung, versteckte Steinhütten und ein Spielplatz mit Pumptrack als Belohnung.",
@@ -122,7 +122,7 @@ const trips: Trip[] = [
     weather: ["sun", "dry"],
     mood: ["calm", "discover"],
     range: ["full"],
-    distance: "ca. 1 Std. 25 Min. ab Troyes",
+    distance: "1 Std. 1 Min. · 63,8 km ab Ferienhaus",
     cost: "Fast vollständig kostenlos",
     mapQuery: "Parc Vix, Avize, France",
     summary: "Weite Ausblicke, Wasserläufe, Klangstationen und ruhige Grand-Cru-Dörfer in einem entspannten Tag.",
@@ -143,7 +143,7 @@ const trips: Trip[] = [
     weather: ["sun", "dry"],
     mood: ["active", "discover"],
     range: ["full"],
-    distance: "ca. 1 Std. 30 Min. ab Troyes",
+    distance: "1 Std. 12 Min. · 96,1 km ab Ferienhaus",
     cost: "Meist kostenlos · Rallye ca. 5 €",
     mapQuery: "Hautvillers, France",
     summary: "Historische Gassen und Weinberge am Vormittag, danach viel Platz zum Spielen und Durchatmen.",
@@ -164,7 +164,7 @@ const trips: Trip[] = [
     weather: ["sun", "dry", "mixed"],
     mood: ["calm", "active", "discover"],
     range: ["travel"],
-    distance: "Ideal als 3-Stunden-Zwischenstopp",
+    distance: "3 Std. 3 Min. · 289 km ab Ferienhaus",
     cost: "Grundprogramm kostenlos",
     mapQuery: "Citadelle de Namur, Route Merveilleuse, Namur, Belgium",
     summary: "Festungsmauern, zwei Flüsse und kleine Suchaufgaben machen aus dem Zwischenstopp ein echtes Abenteuer.",
@@ -212,7 +212,7 @@ const questions: { key: ChoiceKey; kicker: string; title: string; hint: string; 
     title: "Wie groß darf der Tag werden?",
     hint: "Der Weg gehört zum Urlaub – aber nicht an jedem Tag gleich viel.",
     options: [
-      { value: "near", label: "Nah & unkompliziert", detail: "Etwa 30 Minuten ab Troyes" },
+      { value: "near", label: "Nah & unkompliziert", detail: "Etwa 30 bis 40 Minuten ab Ferienhaus" },
       { value: "full", label: "Ein richtiger Tagesausflug", detail: "Bis etwa 1½ Stunden Anfahrt" },
       { value: "travel", label: "Zwischenstopp auf Reise", detail: "Drei abwechslungsreiche Stunden in Namur" },
       { value: "any", label: "Entfernung ist egal", detail: "Die Stimmung entscheidet" },
@@ -221,6 +221,7 @@ const questions: { key: ChoiceKey; kicker: string; title: string; hint: string; 
 ];
 
 const initialChoices = { weather: "", mood: "", range: "" };
+const holidayHome = "17 Rue du Moulin, 10700 Saint-Remy-sous-Barbuise, France";
 
 function scoreTrip(trip: Trip, choices: typeof initialChoices) {
   const weather = choices.weather === "any" || trip.weather.includes(choices.weather) ? 4 : 0;
@@ -294,7 +295,7 @@ export default function Home() {
         <div className="header-meta">
           <span>7 Ideen</span>
           <span className="meta-dot" aria-hidden="true" />
-          <span>für eure Familie</span>
+          <span>ab eurem Ferienhaus</span>
         </div>
       </header>
 
@@ -316,7 +317,7 @@ export default function Home() {
             <p className="eyebrow">Direkter Einstieg</p>
             <h2 id="all-ideas-title">Alle sieben Ideen</h2>
           </div>
-          <p>Schon entschieden? Springt direkt zum Tagesplan.</p>
+          <p>Schon entschieden? Springt direkt zum Tagesplan. Alle Fahrzeiten starten an eurem Ferienhaus in Saint-Remy-sous-Barbuise.</p>
         </div>
         <div className="idea-links">
           {trips.map((trip) => (
@@ -414,11 +415,11 @@ export default function Home() {
                         <span>{trip.cost}</span>
                         <a
                           className="map-link"
-                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(trip.mapQuery)}`}
+                          href={`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(holidayHome)}&destination=${encodeURIComponent(trip.mapQuery)}&travelmode=driving`}
                           target="_blank"
                           rel="noreferrer"
                         >
-                          In Google Maps öffnen ↗
+                          Route ab Ferienhaus ↗
                         </a>
                       </div>
                       <p className="rhythm"><b>So fließt der Tag</b>{trip.rhythm}</p>
@@ -462,7 +463,7 @@ export default function Home() {
       <section className="footer-note">
         <p className="eyebrow">Ein kleiner Urlaubsgrundsatz</p>
         <blockquote>„Eine schöne Hauptidee und genug Zeit zum Treibenlassen.“</blockquote>
-        <p>Alle Vorschläge basieren auf euren sieben Urlaubsunterlagen. Kosten und Öffnungszeiten können sich ändern; kostenpflichtige Angebote bitte kurz vor der Abfahrt prüfen.</p>
+        <p>Alle Vorschläge basieren auf euren sieben Urlaubsunterlagen. Die Fahrzeiten wurden am 24.07.2026 für Autofahrten ab dem Ferienhaus ermittelt und können je nach Verkehr abweichen. Kosten und Öffnungszeiten bitte kurz vor der Abfahrt prüfen.</p>
       </section>
     </main>
   );
