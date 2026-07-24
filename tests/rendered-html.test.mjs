@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const templateRoot = new URL("../", import.meta.url);
@@ -21,9 +22,13 @@ test("renders the Urlaubskompass product shell", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
+  const pageSource = await readFile(new URL("app/page.tsx", templateRoot), "utf8");
   assert.match(html, /<html[^>]+lang="de"/i);
   assert.match(html, /Urlaubskompass/);
   assert.match(html, /Was passt/);
   assert.match(html, /Wie sieht es draußen aus/);
+  assert.match(html, /Alle sieben Ideen/);
+  assert.match(pageSource, /In Google Maps öffnen/);
+  assert.equal((pageSource.match(/mapQuery:/g) ?? []).length, 8);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });

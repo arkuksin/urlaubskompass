@@ -58,6 +58,17 @@ h1 em { color: #cf7657; font-weight: 560; }
 .sun-core { position: relative; z-index: 1; display: grid; place-items: center; width: 102px; height: 102px; border-radius: 50%; background: var(--sun); font: 600 48px/1 var(--font-display); }
 .orbit-label { position: absolute; z-index: 2; right: -14px; bottom: 32px; padding: 7px 10px; background: var(--paper); color: var(--muted); font-size: 11px; line-height: 1.35; text-transform: uppercase; letter-spacing: .08em; }
 
+.all-ideas { margin: -8px 0 38px; padding: 24px 26px 26px; border: 1px solid var(--line); border-radius: 22px; background: rgba(255, 254, 250, .76); }
+.all-ideas-header { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 18px; }
+.all-ideas-header h2 { margin: 0; font-size: 30px; line-height: 1; letter-spacing: -.035em; font-weight: 560; }
+.all-ideas-header > p { max-width: 330px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; text-align: right; }
+.idea-links { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+.idea-jump { min-width: 0; min-height: 112px; padding: 12px; display: flex; flex-direction: column; align-items: flex-start; border: 1px solid #dce2dc; border-radius: 13px; background: var(--white); color: var(--ink); text-align: left; cursor: pointer; transition: transform .2s ease, border-color .2s ease, background .2s ease; }
+.idea-jump:hover { transform: translateY(-2px); border-color: var(--mint-deep); background: #f4f8f4; }
+.idea-jump span { color: #b56c53; font-size: 10px; font-weight: 800; letter-spacing: .08em; }
+.idea-jump strong { margin-top: auto; overflow-wrap: anywhere; font-family: var(--font-display); font-size: 15px; line-height: 1.08; }
+.idea-jump small { display: block; margin-top: 6px; color: var(--muted); font-size: 9px; line-height: 1.25; }
+
 .planner-shell { overflow: hidden; border: 1px solid #cfd9d1; border-radius: 30px; background: var(--white); box-shadow: 0 18px 54px rgba(38, 65, 52, .07); }
 .progress-row { display: grid; grid-template-columns: 48px 1fr 48px; align-items: center; gap: 14px; padding: 17px 28px; border-bottom: 1px solid #cbd8ce; background: var(--mint); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .progress-row span:last-child { text-align: right; }
@@ -104,6 +115,8 @@ h1 em { color: #cf7657; font-weight: 560; }
 .trip-summary { max-width: 730px; margin: 14px 0 17px; color: var(--muted); line-height: 1.55; }
 .fact-row { display: flex; flex-wrap: wrap; gap: 8px; }
 .fact-row span { padding: 7px 9px; border-radius: 8px; background: #eef3ef; color: #52685c; font-size: 12px; }
+.map-link { padding: 7px 9px; border-radius: 8px; background: #f7e9df; color: #9a523d; font-size: 12px; font-weight: 700; text-decoration: none; }
+.map-link:hover { background: #f2d8c8; text-decoration: underline; }
 .rhythm { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; color: #54675d; font-size: 13px; }
 .rhythm b { color: var(--ink); }
 .details-button { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 12px 0; border-top: 1px dashed #d9ddd7; border-bottom: 1px dashed #d9ddd7; background: transparent; color: var(--ink); font-weight: 700; text-align: left; }
@@ -129,6 +142,7 @@ h1 em { color: #cf7657; font-weight: 560; }
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr 180px; }
   .sun-orbit { width: 170px; height: 170px; }
+  .idea-links { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .option-grid { grid-template-columns: 1fr 1fr; }
   .question-copy { grid-template-columns: 1fr; gap: 14px; }
   .question-copy > p:last-child { margin-top: 5px; }
@@ -141,6 +155,11 @@ h1 em { color: #cf7657; font-weight: 560; }
   .header-meta { display: none; }
   .hero { min-height: auto; grid-template-columns: 1fr; padding: 48px 4px 42px; }
   .sun-orbit { display: none; }
+  .all-ideas { margin-top: 0; padding: 20px 16px; }
+  .all-ideas-header { align-items: start; flex-direction: column; gap: 8px; }
+  .all-ideas-header > p { text-align: left; }
+  .idea-links { grid-template-columns: 1fr 1fr; }
+  .idea-jump { min-height: 104px; }
   h1 { font-size: clamp(49px, 15vw, 67px); }
   .hero-intro { font-size: 16px; }
   .planner-shell { border-radius: 21px; }

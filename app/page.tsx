@@ -14,6 +14,7 @@ type Trip = {
   range: string[];
   distance: string;
   cost: string;
+  mapQuery: string;
   summary: string;
   rhythm: string;
   plan: { time: string; title: string; text: string }[];
@@ -33,6 +34,7 @@ const trips: Trip[] = [
     range: ["near", "full"],
     distance: "ca. 30 Min. ab Troyes",
     cost: "Strand kostenlos",
+    mapQuery: "Plage de Mesnil-Saint-Père, Lac d'Orient, France",
     summary: "Ein echter Ferientag am See: wenig Programm, viel Wasser, Sand und Zeit zum Treibenlassen.",
     rhythm: "Hafen → Picknick → Baden → Tretboot → Eis",
     plan: [
@@ -54,6 +56,7 @@ const trips: Trip[] = [
     range: ["near", "full"],
     distance: "ca. 30 Min. ab Troyes",
     cost: "AquaPark ab 18 € / 1 Std.",
+    mapQuery: "Beaver AquaPark, 22 Rue du Lac d'Orient, 10140 Mesnil-Saint-Père, France",
     summary: "Erst eine kleine Entdeckertour am See, dann Wassertrampoline, Rutschen und Balancehindernisse.",
     rhythm: "Naturweg → Picknick → Baden → AquaPark",
     plan: [
@@ -76,6 +79,7 @@ const trips: Trip[] = [
     range: ["near", "full"],
     distance: "ca. 30 Min. ab Troyes",
     cost: "Kinder 15 €, Erwachsene 20 €",
+    mapQuery: "Grimpobranches Orient, Route du Lac, 10270 Lusigny-sur-Barse, France",
     summary: "Ein sportlicher Vormittag zwischen den Bäumen und danach ein ganz freier Nachmittag am See.",
     rhythm: "Klettern → Picknick → Strand → Baden",
     plan: [
@@ -98,6 +102,7 @@ const trips: Trip[] = [
     range: ["full"],
     distance: "ca. 50–55 km ab Troyes",
     cost: "Nahezu kostenlos",
+    mapQuery: "Parc du Château Saint-Louis, Les Riceys, France",
     summary: "Leichte Weinbergwanderung, versteckte Steinhütten und ein Spielplatz mit Pumptrack als Belohnung.",
     rhythm: "Weinberge → Picknick → Pumptrack → Dorf",
     plan: [
@@ -119,6 +124,7 @@ const trips: Trip[] = [
     range: ["full"],
     distance: "ca. 1 Std. 25 Min. ab Troyes",
     cost: "Fast vollständig kostenlos",
+    mapQuery: "Parc Vix, Avize, France",
     summary: "Weite Ausblicke, Wasserläufe, Klangstationen und ruhige Grand-Cru-Dörfer in einem entspannten Tag.",
     rhythm: "Parc Vix → Picknick → Avize → Cramant",
     plan: [
@@ -139,6 +145,7 @@ const trips: Trip[] = [
     range: ["full"],
     distance: "ca. 1 Std. 30 Min. ab Troyes",
     cost: "Meist kostenlos · Rallye ca. 5 €",
+    mapQuery: "Hautvillers, France",
     summary: "Historische Gassen und Weinberge am Vormittag, danach viel Platz zum Spielen und Durchatmen.",
     rhythm: "Rallye → Reben → Schlosspark → Mémorial",
     plan: [
@@ -159,6 +166,7 @@ const trips: Trip[] = [
     range: ["travel"],
     distance: "Ideal als 3-Stunden-Zwischenstopp",
     cost: "Grundprogramm kostenlos",
+    mapQuery: "Citadelle de Namur, Route Merveilleuse, Namur, Belgium",
     summary: "Festungsmauern, zwei Flüsse und kleine Suchaufgaben machen aus dem Zwischenstopp ein echtes Abenteuer.",
     rhythm: "Le Grognon → Altstadt → Zitadelle → Picknick",
     plan: [
@@ -259,6 +267,15 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  function openIdea(id: string) {
+    setStep(3);
+    setShowAll(true);
+    setOpenTrip(id);
+    window.setTimeout(() => {
+      document.getElementById(`trip-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 60);
+  }
+
   function toggleSaved(id: string) {
     setSaved((current) => {
       const updated = current.includes(id) ? current.filter((item) => item !== id) : [...current, id];
@@ -290,6 +307,25 @@ export default function Home() {
         <div className="sun-orbit" aria-hidden="true">
           <span className="sun-core">7</span>
           <span className="orbit-label">gesammelte<br />Tagesideen</span>
+        </div>
+      </section>
+
+      <section className="all-ideas" aria-labelledby="all-ideas-title">
+        <div className="all-ideas-header">
+          <div>
+            <p className="eyebrow">Direkter Einstieg</p>
+            <h2 id="all-ideas-title">Alle sieben Ideen</h2>
+          </div>
+          <p>Schon entschieden? Springt direkt zum Tagesplan.</p>
+        </div>
+        <div className="idea-links">
+          {trips.map((trip) => (
+            <button className="idea-jump" type="button" key={trip.id} onClick={() => openIdea(trip.id)}>
+              <span>{trip.number}</span>
+              <strong>{trip.title}</strong>
+              <small>{trip.region}</small>
+            </button>
+          ))}
         </div>
       </section>
 
@@ -352,7 +388,7 @@ export default function Home() {
                 const isOpen = openTrip === trip.id;
                 const isSaved = saved.includes(trip.id);
                 return (
-                  <article className={`trip-card ${index === 0 ? "top-match" : ""}`} key={trip.id}>
+                  <article className={`trip-card ${index === 0 ? "top-match" : ""}`} key={trip.id} id={`trip-${trip.id}`}>
                     <div className="trip-index">
                       <span>{trip.number}</span>
                       <small>{index === 0 ? "Beste Idee" : index < 3 ? "Passt gut" : "Weitere Idee"}</small>
@@ -376,6 +412,14 @@ export default function Home() {
                       <div className="fact-row">
                         <span>{trip.distance}</span>
                         <span>{trip.cost}</span>
+                        <a
+                          className="map-link"
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(trip.mapQuery)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          In Google Maps öffnen ↗
+                        </a>
                       </div>
                       <p className="rhythm"><b>So fließt der Tag</b>{trip.rhythm}</p>
                       <button className="details-button" type="button" onClick={() => setOpenTrip(isOpen ? null : trip.id)} aria-expanded={isOpen}>
