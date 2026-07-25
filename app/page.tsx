@@ -535,12 +535,17 @@ function ReviewScores({ trip, compact = false }: { trip: Trip; compact?: boolean
 export default function Home() {
   const [openTrip, setOpenTrip] = useState<string | null>(null);
   const [saved, setSaved] = useState<string[]>([]);
+  const [visited, setVisited] = useState<string[]>([]);
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("urlaub-favoriten");
-    if (!stored) return;
+    const storedFavorites = window.localStorage.getItem("urlaub-favoriten");
+    const storedVisited = window.localStorage.getItem("urlaub-besucht");
+    if (!storedFavorites && !storedVisited) return;
 
-    const timer = window.setTimeout(() => setSaved(JSON.parse(stored)), 0);
+    const timer = window.setTimeout(() => {
+      if (storedFavorites) setSaved(JSON.parse(storedFavorites));
+      if (storedVisited) setVisited(JSON.parse(storedVisited));
+    }, 0);
     return () => window.clearTimeout(timer);
   }, []);
 
@@ -558,6 +563,16 @@ export default function Home() {
       return updated;
     });
   }
+
+  function toggleVisited(id: string) {
+    setVisited((current) => {
+      const updated = current.includes(id) ? current.filter((item) => item !== id) : [...current, id];
+      window.localStorage.setItem("urlaub-besucht", JSON.stringify(updated));
+      return updated;
+    });
+  }
+
+  const visitedDestinations = visited.filter((id) => trips.some((trip) => trip.id === id)).length;
 
   return (
     <main>
@@ -593,10 +608,11 @@ export default function Home() {
           </div>
           <p>Auf einen Marker tippen, um Ziel, Fahrzeit und Route zu sehen. Die Karte lässt sich verschieben und zoomen.</p>
         </div>
-        <DestinationMap places={mapPlaces} />
+        <DestinationMap places={mapPlaces} visitedIds={visited} />
         <div className="map-legend" aria-label="Kartenlegende">
           <span><i className="legend-home">⌂</i> Ferienwohnung</span>
           <span><i className="legend-destination">01</i> Ziel</span>
+          <span><i className="legend-visited">✓</i> Besucht</span>
           <span><i className="legend-stopover">→</i> Reisestopp Namur</span>
         </div>
       </section>
@@ -610,21 +626,35 @@ export default function Home() {
           <p>Tippt auf ein Ziel und springt direkt zum Tagesplan. Alle Fahrzeiten starten an eurem Ferienhaus in Saint-Remy-sous-Barbuise.</p>
         </div>
         <div className="idea-links">
-          {trips.map((trip) => (
-            <button className="idea-jump" type="button" key={trip.id} onClick={() => openIdea(trip.id)}>
-              <span className="idea-image">
-                <img src={trip.image} alt={trip.imageAlt} loading="lazy" />
-                <i>{trip.number}</i>
-              </span>
-              <strong>{trip.title}</strong>
-              <small>{trip.region}</small>
-              <div className="idea-meta" aria-label={`Fahrzeit ${trip.distance.split(" · ")[0]}, Kosten ${trip.cost}`}>
-                <p className="idea-time"><span>Fahrzeit</span><b>{trip.distance.split(" · ")[0]}</b></p>
-                <p className="idea-price"><span>Kosten</span><b>{trip.cost}</b></p>
-              </div>
-              <ReviewScores trip={trip} compact />
-            </button>
-          ))}
+          {trips.map((trip) => {
+            const isVisited = visited.includes(trip.id);
+            return (
+              <article className={`idea-jump ${isVisited ? "visited" : ""}`} key={trip.id}>
+                <button className="idea-open" type="button" onClick={() => openIdea(trip.id)}>
+                  <span className="idea-image">
+                    <img src={trip.image} alt={trip.imageAlt} loading="lazy" />
+                    <i>{trip.number}</i>
+                    <span className={`visit-status ${isVisited ? "is-visited" : ""}`}>{isVisited ? "Besucht ✓" : "Noch nicht besucht"}</span>
+                  </span>
+                  <strong>{trip.title}</strong>
+                  <small>{trip.region}</small>
+                  <div className="idea-meta" aria-label={`Fahrzeit ${trip.distance.split(" · ")[0]}, Kosten ${trip.cost}`}>
+                    <p className="idea-time"><span>Fahrzeit</span><b>{trip.distance.split(" · ")[0]}</b></p>
+                    <p className="idea-price"><span>Kosten</span><b>{trip.cost}</b></p>
+                  </div>
+                  <ReviewScores trip={trip} compact />
+                </button>
+                <button
+                  className={`visit-toggle compact ${isVisited ? "visited" : ""}`}
+                  type="button"
+                  aria-pressed={isVisited}
+                  onClick={() => toggleVisited(trip.id)}
+                >
+                  {isVisited ? "Als nicht besucht markieren" : "Als besucht markieren"}
+                </button>
+              </article>
+            );
+          })}
         </div>
       </section>
 
@@ -636,18 +666,22 @@ export default function Home() {
                 <h2 id="destinations-title">Einfach ein Ziel aussuchen.</h2>
                 <p>Keine Fragen, kein Ranking: Hier stehen alle Ziele in derselben Reihenfolge wie auf der Karte.</p>
               </div>
-              <span className="saved-count">{saved.length ? `${saved.length} Favorit${saved.length > 1 ? "en" : ""} gemerkt` : "♡ Favoriten auf diesem Gerät merken"}</span>
+              <div className="heading-stats">
+                <span className="visited-count">✓ {visitedDestinations} von 13 besucht</span>
+                <span className="saved-count">{saved.length ? `${saved.length} Favorit${saved.length > 1 ? "en" : ""} gemerkt` : "♡ Favoriten auf diesem Gerät merken"}</span>
+              </div>
             </div>
 
             <div className="trip-list">
               {trips.map((trip) => {
                 const isOpen = openTrip === trip.id;
                 const isSaved = saved.includes(trip.id);
+                const isVisited = visited.includes(trip.id);
                 return (
-                  <article className="trip-card" key={trip.id} id={`trip-${trip.id}`}>
+                  <article className={`trip-card ${isVisited ? "visited" : ""}`} key={trip.id} id={`trip-${trip.id}`}>
                     <div className="trip-index">
                       <span>{trip.number}</span>
-                      <small>Ziel</small>
+                      <small>{isVisited ? "Besucht ✓" : "Noch offen"}</small>
                     </div>
                     <div className="trip-main">
                       <div className="trip-title-row">
@@ -655,14 +689,24 @@ export default function Home() {
                           <p className="trip-region">{trip.region}</p>
                           <h3>{trip.title}</h3>
                         </div>
-                        <button
-                          className={`save-button ${isSaved ? "saved" : ""}`}
-                          type="button"
-                          aria-label={isSaved ? `${trip.title} aus Favoriten entfernen` : `${trip.title} als Favorit merken`}
-                          onClick={() => toggleSaved(trip.id)}
-                        >
-                          {isSaved ? "♥" : "♡"}
-                        </button>
+                        <div className="trip-actions">
+                          <button
+                            className={`visit-toggle ${isVisited ? "visited" : ""}`}
+                            type="button"
+                            aria-pressed={isVisited}
+                            onClick={() => toggleVisited(trip.id)}
+                          >
+                            {isVisited ? "Besucht ✓" : "Noch nicht besucht"}
+                          </button>
+                          <button
+                            className={`save-button ${isSaved ? "saved" : ""}`}
+                            type="button"
+                            aria-label={isSaved ? `${trip.title} aus Favoriten entfernen` : `${trip.title} als Favorit merken`}
+                            onClick={() => toggleSaved(trip.id)}
+                          >
+                            {isSaved ? "♥" : "♡"}
+                          </button>
+                        </div>
                       </div>
                       <div className="trip-visual">
                         <img src={trip.image} alt={trip.imageAlt} loading="lazy" />
@@ -720,7 +764,17 @@ export default function Home() {
       </section>
 
       <section className="stopover-section" aria-labelledby="stopover-title">
-        <div className="stopover-label">Reisestopp · kein Ausflug ab Ferienhaus</div>
+        <div className="stopover-status-row">
+          <div className="stopover-label">Reisestopp · kein Ausflug ab Ferienhaus</div>
+          <button
+            className={`visit-toggle ${visited.includes(stopover.id) ? "visited" : ""}`}
+            type="button"
+            aria-pressed={visited.includes(stopover.id)}
+            onClick={() => toggleVisited(stopover.id)}
+          >
+            {visited.includes(stopover.id) ? "Besucht ✓" : "Noch nicht besucht"}
+          </button>
+        </div>
         <div className="stopover-grid">
           <div className="stopover-intro">
             <div className="stopover-image"><img src={stopover.image} alt={stopover.imageAlt} loading="lazy" /></div>

@@ -37,6 +37,11 @@ test("renders the Urlaubskompass product shell", async () => {
   assert.match(pageSource, /Königsstadt Reims/);
   assert.match(pageSource, /Paris & Eiffelturm/);
   assert.match(pageSource, /DestinationMap/);
+  assert.match(html, /Noch nicht besucht/);
+  assert.match(pageSource, /urlaub-besucht/);
+  assert.match(pageSource, /Als besucht markieren/);
+  assert.match(pageSource, /von 13 besucht/);
+  assert.match(pageSource, /visitedIds/);
   assert.match(pageSource, /Bewertungen für/);
   assert.match(pageSource, /Tripadvisor/);
   assert.match(pageSource, /19\.557/);

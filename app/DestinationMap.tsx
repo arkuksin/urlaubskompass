@@ -23,7 +23,7 @@ function routeUrl(place: MapPlace) {
   return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(holidayHome)}&destination=${encodeURIComponent(place.mapQuery)}&travelmode=driving`;
 }
 
-export default function DestinationMap({ places }: { places: MapPlace[] }) {
+export default function DestinationMap({ places, visitedIds }: { places: MapPlace[]; visitedIds: string[] }) {
   const mapElement = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,10 +47,11 @@ export default function DestinationMap({ places }: { places: MapPlace[] }) {
       const bounds = L.latLngBounds(places.map((place) => place.coordinates));
 
       for (const place of places) {
+        const isVisited = visitedIds.includes(place.id);
         const markerLabel = place.kind === "home" ? "⌂" : place.number;
         const icon = L.divIcon({
           className: "map-marker-shell",
-          html: `<span class="map-pin map-pin-${place.kind}">${markerLabel}</span>`,
+          html: `<span class="map-pin map-pin-${place.kind}${isVisited ? " map-pin-visited" : ""}">${markerLabel}</span>`,
           iconSize: [38, 46],
           iconAnchor: [19, 45],
           popupAnchor: [0, -40],
@@ -60,7 +61,7 @@ export default function DestinationMap({ places }: { places: MapPlace[] }) {
         popup.className = "map-popup";
 
         const eyebrow = document.createElement("small");
-        eyebrow.textContent = place.kind === "home" ? "Euer Ausgangspunkt" : place.kind === "stopover" ? "Reisestopp" : `Ziel ${place.number}`;
+        eyebrow.textContent = place.kind === "home" ? "Euer Ausgangspunkt" : `${isVisited ? "Besucht ✓ · " : "Noch nicht besucht · "}${place.kind === "stopover" ? "Reisestopp" : `Ziel ${place.number}`}`;
 
         const title = document.createElement("strong");
         title.textContent = place.title;
@@ -101,7 +102,7 @@ export default function DestinationMap({ places }: { places: MapPlace[] }) {
       disposed = true;
       map?.remove();
     };
-  }, [places]);
+  }, [places, visitedIds]);
 
   return <div className="map-canvas" ref={mapElement} role="region" aria-label="Übersichtskarte mit Ferienhaus, Ausflugszielen und Reisestopp" />;
 }
