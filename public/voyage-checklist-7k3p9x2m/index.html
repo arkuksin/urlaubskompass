@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#f7f3e8">
-  <meta name="description" content="Семейный список вещей для поездки во Францию">
-  <title>Собираемся во Францию — чек-лист</title>
+  <meta name="description" content="Общий семейный список вещей для поездки во Францию">
+  <title>Собираемся во Францию — общий чек-лист</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
     <header class="hero">
       <div class="eyebrow">🇫🇷 Семейная поездка</div>
       <h1>Собираемся во Францию</h1>
-      <p>Все вещи, которые мы надиктовали. Отмечайте собранное и добавляйте новые пункты — изменения сохраняются автоматически.</p>
+      <p>Общий список для всей семьи. Галочки и новые вещи автоматически появляются на всех устройствах, открывших эту ссылку.</p>
       <section class="progress" aria-label="Прогресс сборов">
         <div class="percent" id="percent">0%</div>
         <div class="progress-copy">
@@ -22,9 +22,10 @@
           <div class="track"><div id="fill"></div></div>
         </div>
       </section>
+      <p id="syncStatus" role="status" aria-live="polite" style="position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;margin:14px 0 0;padding:8px 12px;border-radius:999px;background:#fff;color:#65746f;font-size:.86rem;font-weight:750;box-shadow:0 3px 12px rgba(55,72,66,.07)">⏳ Подключаем общий список…</p>
     </header>
     <nav class="toolbar" aria-label="Действия со списком">
-      <button class="button primary" id="copyLink" type="button">🔗 Скопировать ссылку</button>
+      <button class="button primary" id="copyLink" type="button">🔗 Скопировать общую ссылку</button>
       <button class="button" id="uncheckAll" type="button">Снять все галочки</button>
       <button class="button danger" id="restoreList" type="button">Вернуть исходный список</button>
     </nav>
@@ -37,7 +38,7 @@
       </form>
     </section>
     <section class="categories" id="categories" aria-live="polite"></section>
-    <p class="note">Галочки и добавленные пункты хранятся в браузере на этом устройстве.</p>
+    <p class="note">При временном отсутствии интернета изменения сохраняются на устройстве и отправляются после восстановления соединения.</p>
   </main>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="app.js"></script>
