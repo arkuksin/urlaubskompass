@@ -1,7 +1,7 @@
 const KEY="france-family-packing-v1-7k3p9x2m";
 const OUTBOX_KEY=`${KEY}-outbox`;
-const LIST_ID=new URLSearchParams(location.search).get("list")||"france-2026-7k3p9x2m";
-const API=`/api/packing-list/${encodeURIComponent(LIST_ID)}`;
+const LIST_ID=new URLSearchParams(location.search).get("list")||"";
+const API=`https://xrwvsjwnztdfsjmwycgl.supabase.co/functions/v1/packing-sync?listId=${encodeURIComponent(LIST_ID)}`;
 const meta={
   "Документы и техника":["🔌",1],"Одежда":["👕",2],"Обувь":["👟",3],
   "Ванная и здоровье":["🧴",4],"Пляж и вода":["🏖️",5],"Игры и досуг":["🏸",6],
@@ -61,6 +61,7 @@ function render(){
   progress();
 }
 async function request(method="GET",body,query=""){
+  if(!LIST_ID)throw new Error("missing list id");
   const response=await fetch(API+query,{method,cache:"no-store",headers:body?{"Content-Type":"application/json"}:undefined,body:body?JSON.stringify(body):undefined});
   if(!response.ok)throw new Error(`sync ${response.status}`);
   return response.json();
@@ -73,7 +74,7 @@ async function ensureRemote(){
 }
 async function sendOperation(op){
   if(op.kind==="upsert")return request("PUT",{item:op.item});
-  if(op.kind==="delete")return request("DELETE",undefined,`?itemId=${encodeURIComponent(op.itemId)}`);
+  if(op.kind==="delete")return request("DELETE",undefined,`&itemId=${encodeURIComponent(op.itemId)}`);
   if(op.kind==="uncheckAll")return request("POST",{action:"uncheckAll"});
   if(op.kind==="replace")return request("POST",{action:"replace",items:op.items});
   throw new Error("unknown operation");
@@ -136,4 +137,4 @@ $("copyLink").addEventListener("click",async()=>{
 window.addEventListener("online",()=>{remoteKnown=false;void(outbox.length?flushOutbox():pullRemote())});
 window.addEventListener("focus",()=>void(outbox.length?flushOutbox():pullRemote()));
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")void(outbox.length?flushOutbox():pullRemote())});
-render();syncStatus("connecting");void(outbox.length?flushOutbox():pullRemote());setInterval(()=>void(outbox.length?flushOutbox():pullRemote()),5000);
+render();syncStatus(LIST_ID?"connecting":"offline");if(LIST_ID)void(outbox.length?flushOutbox():pullRemote());setInterval(()=>{if(LIST_ID)void(outbox.length?flushOutbox():pullRemote())},5000);
