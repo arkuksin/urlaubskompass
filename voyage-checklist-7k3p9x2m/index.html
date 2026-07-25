@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7f3e8">
+  <meta name="description" content="Семейный список вещей для поездки во Францию">
+  <title>Собираемся во Францию — чек-лист</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <div class="eyebrow">🇫🇷 Семейная поездка</div>
+      <h1>Собираемся во Францию</h1>
+      <p>Все вещи, которые мы надиктовали. Отмечайте собранное и добавляйте новые пункты — изменения сохраняются автоматически.</p>
+      <section class="progress" aria-label="Прогресс сборов">
+        <div class="percent" id="percent">0%</div>
+        <div class="progress-copy">
+          <strong id="progressTitle">Пока ничего не собрано</strong>
+          <span id="progressDetails">0 из 0 пунктов</span>
+          <div class="track"><div id="fill"></div></div>
+        </div>
+      </section>
+    </header>
+
+    <nav class="toolbar" aria-label="Действия со списком">
+      <button class="button primary" id="copyLink" type="button">🔗 Скопировать ссылку</button>
+      <button class="button" id="uncheckAll" type="button">Снять все галочки</button>
+      <button class="button danger" id="restoreList" type="button">Вернуть исходный список</button>
+    </nav>
+
+    <section class="add-panel">
+      <h2>Добавить новую вещь</h2>
+      <form id="addForm">
+        <input id="newItem" maxlength="120" placeholder="Например: полотенца" autocomplete="off" required>
+        <select id="newCategory" aria-label="Раздел"></select>
+        <button class="button primary" type="submit">＋ Добавить</button>
+      </form>
+    </section>
+
+    <section class="categories" id="categories" aria-live="polite"></section>
+    <p class="note">Галочки и добавленные пункты хранятся в браузере на этом устройстве.</p>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
