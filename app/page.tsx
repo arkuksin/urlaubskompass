@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import DestinationMap, { type MapPlace } from "./DestinationMap";
 import VacationPlanner from "./VacationPlanner";
+import { ActivityPlanPicker, VacationPlanProvider } from "./VacationPlanContext";
 
 type PlatformRating = {
   score: string;
@@ -702,6 +703,7 @@ export default function Home() {
     .sort((a, b) => b.score - a.score || Number(a.trip.number) - Number(b.trip.number));
 
   return (
+    <VacationPlanProvider>
     <main>
       <header className="site-header">
         <a className="brand" href="#start" aria-label="Urlaubskompass – zum Anfang">
@@ -804,6 +806,7 @@ export default function Home() {
                   <ReviewScores trip={trip} compact />
                 </button>
                 <VotePanel trip={trip} votes={votes[trip.id] ?? {}} pendingVote={pendingVote} onVote={castVote} compact />
+                <ActivityPlanPicker tripId={trip.id} tripTitle={trip.title} compact />
                 <button
                   className={`visit-toggle compact ${isVisited ? "visited" : ""}`}
                   type="button"
@@ -893,6 +896,7 @@ export default function Home() {
                       </div>
                       <ReviewScores trip={trip} />
                       <VotePanel trip={trip} votes={votes[trip.id] ?? {}} pendingVote={pendingVote} onVote={castVote} />
+                      <ActivityPlanPicker tripId={trip.id} tripTitle={trip.title} />
                       <p className="rhythm"><b>So fließt der Tag</b>{trip.rhythm}</p>
                       <button className="details-button" type="button" onClick={() => setOpenTrip(isOpen ? null : trip.id)} aria-expanded={isOpen}>
                         {isOpen ? "Tagesplan schließen" : "Tagesplan öffnen"}<span aria-hidden="true">{isOpen ? "−" : "+"}</span>
@@ -976,5 +980,6 @@ export default function Home() {
         <p>Dreizehn Ziele und der Namur-Reisestopp sind jetzt gemeinsam auf der Karte sichtbar. Die Angaben basieren auf euren Urlaubsunterlagen und ergänzender Recherche. Fahrzeiten sowie Google- und Tripadvisor-Bewertungen wurden am 24./25.07.2026 geprüft und können sich ändern. Kosten und Öffnungszeiten bitte kurz vor der Abfahrt prüfen.</p>
       </section>
     </main>
+    </VacationPlanProvider>
   );
 }

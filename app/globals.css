@@ -123,9 +123,28 @@ h1 em { color: #cf7657; font-weight: 560; }
 .planner-empty > span { display: grid; place-items: center; width: 38px; height: 38px; flex: 0 0 auto; border-radius: 50%; background: #dcebe0; color: #315a48; font-size: 23px; }
 .planner-empty p { max-width: 520px; margin: 0; line-height: 1.5; }
 .planner-empty b { color: var(--ink); }
-.vacation-days { margin-top: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-.vacation-day { min-width: 0; padding: 16px; border: 1px solid #d6dfd8; border-radius: 15px; background: rgba(255, 254, 250, .82); }
+.plan-at-a-glance { margin-top: 20px; padding: 18px; border: 1px solid #c8d7cd; border-radius: 17px; background: rgba(255, 254, 250, .88); }
+.plan-overview-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+.plan-overview-heading h3 { margin: 0; font-size: 24px; line-height: 1.08; letter-spacing: -.025em; font-weight: 560; }
+.plan-overview-legend { display: flex; flex-wrap: wrap; gap: 11px; color: #65766d; font-size: 9px; font-weight: 700; }
+.plan-overview-legend span { display: flex; align-items: center; gap: 5px; }
+.plan-overview-legend i { width: 9px; height: 9px; border-radius: 50%; }
+.planned-dot { background: #56826a; }
+.free-dot { border: 1px dashed #9baa9f; background: #f5f4ed; }
+.plan-overview-grid { margin-top: 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 7px; }
+.plan-overview-day { min-width: 0; min-height: 104px; padding: 11px; display: flex; flex-direction: column; border: 1px solid #d4ddd6; border-radius: 11px; background: #fff; color: var(--ink); text-decoration: none; transition: transform .18s ease, border-color .18s ease; }
+.plan-overview-day:hover { transform: translateY(-2px); border-color: #769a83; }
+.plan-overview-day > span { color: #77877e; font-size: 8px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.plan-overview-day > strong { margin-top: 4px; font-family: var(--font-display); font-size: 15px; text-transform: capitalize; }
+.plan-overview-day > small { margin-top: auto; padding-top: 9px; overflow: hidden; color: #4d6e5b; font-size: 9px; font-weight: 700; line-height: 1.3; text-overflow: ellipsis; }
+.plan-overview-day.has-plan { border-color: #91b09c; background: linear-gradient(145deg, #e4f1e7, #f9fbf7); box-shadow: inset 0 3px #5f8a70; }
+.plan-overview-day.is-free { border-style: dashed; background: #faf9f3; }
+.plan-overview-day.is-free > small { color: #88928c; font-weight: 600; }
+.plan-overview-day.is-free > small i { display: inline-grid; place-items: center; width: 17px; height: 17px; margin-right: 3px; border-radius: 50%; background: #e9ece6; font-size: 12px; font-style: normal; }
+.vacation-days { margin-top: 23px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.vacation-day { min-width: 0; padding: 16px; scroll-margin-top: 20px; border: 1px solid #d6dfd8; border-radius: 15px; background: rgba(255, 254, 250, .82); }
 .vacation-day.has-plan { border-color: #94b3a0; background: #fffefa; box-shadow: inset 4px 0 #6e9a80; }
+.vacation-day.is-free { border-style: dashed; background: rgba(249, 248, 242, .78); }
 .day-heading { display: flex; align-items: start; justify-content: space-between; gap: 13px; }
 .day-heading small { color: #809087; font-size: 8px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .day-heading h3 { margin: 3px 0 0; font-size: 21px; line-height: 1.08; letter-spacing: -.025em; font-weight: 560; text-transform: capitalize; }
@@ -139,11 +158,30 @@ h1 em { color: #cf7657; font-weight: 560; }
 .planned-trip-open b { display: block; overflow: hidden; font-family: var(--font-display); font-size: 14px; line-height: 1.08; text-overflow: ellipsis; white-space: nowrap; }
 .planned-trip-open small { display: block; margin-top: 3px; overflow: hidden; color: #738079; font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
 .unplan-button { width: 28px; height: 28px; border: 1px solid #e2cbc3; border-radius: 50%; background: #fff5f1; color: #a0523c; font-size: 17px; cursor: pointer; }
+.free-day-invitation { margin-top: 13px; padding: 10px; display: flex; align-items: center; gap: 9px; border-radius: 10px; background: rgba(235, 237, 230, .7); color: #78837d; }
+.free-day-invitation > span { display: grid; place-items: center; width: 29px; height: 29px; flex: 0 0 auto; border: 1px dashed #9daa9f; border-radius: 50%; font-size: 17px; }
+.free-day-invitation p { margin: 0; font-size: 10px; }
+.free-day-invitation b, .free-day-invitation small { display: block; }
+.free-day-invitation small { margin-top: 2px; font-size: 8px; }
 .day-add-row { margin-top: 13px; display: grid; grid-template-columns: 1fr auto; gap: 7px; }
 .day-add-row select { min-width: 0; }
 .day-add-row button { padding-inline: 12px; }
 .plan-save-status { min-height: 15px; margin: 13px 0 0; color: #687a70; font-size: 10px; }
 .plan-save-status.error { color: #a44939; }
+
+.card-plan-picker { width: 100%; margin-top: 14px; padding: 13px; border: 1px solid #d2ddd5; border-radius: 13px; background: #f5f7f2; }
+.card-plan-picker.is-planned { border-color: #84aa91; background: linear-gradient(135deg, #e3f1e6, #f8fbf6); box-shadow: inset 3px 0 #5e8d70; }
+.card-plan-picker label { display: grid; gap: 6px; }
+.plan-picker-label { color: #53685c; font-size: 9px; font-weight: 850; letter-spacing: .075em; text-transform: uppercase; }
+.card-plan-picker select { width: 100%; min-height: 42px; padding: 9px 35px 9px 10px; border: 1px solid #bdccc2; border-radius: 9px; background: white; color: var(--ink); font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; }
+.card-plan-picker select:disabled { opacity: .6; cursor: wait; }
+.card-plan-picker > small { display: block; margin-top: 6px; color: #77857d; font-size: 9px; line-height: 1.3; }
+.card-plan-picker.is-planned > small { color: #3f7156; font-weight: 800; }
+.card-plan-picker > a { min-height: 38px; padding: 9px 10px; display: flex; align-items: center; border: 1px dashed #b8c7bd; border-radius: 9px; background: white; color: #476b56; font-size: 10px; font-weight: 800; text-decoration: none; }
+.card-plan-picker.compact { margin-top: 9px; padding: 9px; }
+.card-plan-picker.compact .plan-picker-label { font-size: 8px; }
+.card-plan-picker.compact select { min-height: 36px; padding-block: 7px; font-size: 9px; }
+.card-plan-picker.compact > small { font-size: 8px; }
 
 .all-ideas { margin: -8px 0 38px; padding: 24px 26px 26px; border: 1px solid var(--line); border-radius: 22px; background: rgba(255, 254, 250, .76); }
 .all-ideas-header { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 18px; }
@@ -348,6 +386,10 @@ h1 em { color: #cf7657; font-weight: 560; }
   .vacation-planner { margin-top: 0; padding: 24px 18px; border-radius: 20px; }
   .vacation-plan-heading { align-items: flex-start; flex-direction: column; gap: 12px; }
   .period-form { grid-template-columns: 1fr; }
+  .plan-at-a-glance { padding: 14px; }
+  .plan-overview-heading { align-items: flex-start; flex-direction: column; gap: 9px; }
+  .plan-overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .plan-overview-day { min-height: 95px; }
   .day-add-row { grid-template-columns: 1fr; }
   .all-ideas { margin-top: 0; padding: 20px 16px; }
   .all-ideas-header { align-items: start; flex-direction: column; gap: 8px; }
