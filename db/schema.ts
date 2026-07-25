@@ -1,4 +1,12 @@
-// Intentionally empty by default.
-// Add Drizzle tables here when the site actually needs a database.
-// See examples/d1/db/schema.ts for an opt-in example.
-export {};
+import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
+
+export const destinationVotes = sqliteTable(
+  "destination_votes",
+  {
+    tripId: text("trip_id").notNull(),
+    voter: text("voter", { enum: ["me", "wife"] }).notNull(),
+    vote: text("vote", { enum: ["yes", "maybe", "no"] }).notNull(),
+    updatedAt: integer("updated_at").notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.tripId, table.voter] })],
+);

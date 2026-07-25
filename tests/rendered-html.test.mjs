@@ -23,6 +23,9 @@ test("renders the Urlaubskompass product shell", async () => {
 
   const html = await response.text();
   const pageSource = await readFile(new URL("app/page.tsx", templateRoot), "utf8");
+  const votesApiSource = await readFile(new URL("app/api/votes/route.ts", templateRoot), "utf8");
+  const hostingConfig = JSON.parse(await readFile(new URL(".openai/hosting.json", templateRoot), "utf8"));
+  const votesMigration = await readFile(new URL("drizzle/0000_odd_red_skull.sql", templateRoot), "utf8");
   const activityImages = await readdir(new URL("public/activities/", templateRoot));
   assert.match(html, /<html[^>]+lang="de"/i);
   assert.match(html, /Urlaubskompass/);
@@ -42,6 +45,13 @@ test("renders the Urlaubskompass product shell", async () => {
   assert.match(pageSource, /Als besucht markieren/);
   assert.match(pageSource, /von 13 besucht/);
   assert.match(pageSource, /visitedIds/);
+  assert.match(html, /Gemeinsame Wunschliste/);
+  assert.match(html, /Will ich/);
+  assert.match(html, /Meine Frau/);
+  assert.match(pageSource, /Volltreffer/);
+  assert.match(votesApiSource, /ON CONFLICT/);
+  assert.match(votesMigration, /CREATE TABLE `destination_votes`/);
+  assert.equal(hostingConfig.d1, "DB");
   assert.match(pageSource, /Bewertungen für/);
   assert.match(pageSource, /Tripadvisor/);
   assert.match(pageSource, /19\.557/);

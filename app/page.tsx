@@ -9,6 +9,16 @@ type PlatformRating = {
   url: string;
 };
 
+type Voter = "me" | "wife";
+type VoteValue = "yes" | "maybe" | "no";
+type VoteState = Record<string, Partial<Record<Voter, VoteValue>>>;
+
+const voteOptions: { value: VoteValue; emoji: string; label: string }[] = [
+  { value: "yes", emoji: "👍", label: "Will ich" },
+  { value: "maybe", emoji: "🤷", label: "Vielleicht" },
+  { value: "no", emoji: "👎", label: "Eher nicht" },
+];
+
 type Trip = {
   id: string;
   number: string;
@@ -532,10 +542,63 @@ function ReviewScores({ trip, compact = false }: { trip: Trip; compact?: boolean
   );
 }
 
+function VotePanel({
+  trip,
+  votes,
+  pendingVote,
+  onVote,
+  compact = false,
+}: {
+  trip: Trip;
+  votes: Partial<Record<Voter, VoteValue>>;
+  pendingVote: string | null;
+  onVote: (tripId: string, voter: Voter, vote: VoteValue) => void;
+  compact?: boolean;
+}) {
+  const voters: { id: Voter; label: string }[] = [
+    { id: "me", label: "Ich" },
+    { id: "wife", label: "Meine Frau" },
+  ];
+
+  return (
+    <div className={`vote-panel ${compact ? "compact" : ""}`} aria-label={`Abstimmung für ${trip.title}`}>
+      {!compact && <p><b>Eure Stimmen</b><span>Auf beiden Geräten sichtbar</span></p>}
+      {voters.map((voter) => (
+        <div className="voter-row" key={voter.id}>
+          <span>{voter.label}</span>
+          <div role="group" aria-label={`${voter.label}: Stimme für ${trip.title}`}>
+            {voteOptions.map((option) => {
+              const isSelected = votes[voter.id] === option.value;
+              const isPending = pendingVote === `${trip.id}:${voter.id}`;
+              return (
+                <button
+                  className={`vote-choice vote-${option.value} ${isSelected ? "selected" : ""}`}
+                  type="button"
+                  key={option.value}
+                  aria-pressed={isSelected}
+                  aria-label={`${voter.label}: ${option.label}`}
+                  title={option.label}
+                  disabled={isPending}
+                  onClick={() => onVote(trip.id, voter.id, option.value)}
+                >
+                  <span aria-hidden="true">{option.emoji}</span>{!compact && <small>{option.label}</small>}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function Home() {
   const [openTrip, setOpenTrip] = useState<string | null>(null);
   const [saved, setSaved] = useState<string[]>([]);
   const [visited, setVisited] = useState<string[]>([]);
+  const [votes, setVotes] = useState<VoteState>({});
+  const [voteStatus, setVoteStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [pendingVote, setPendingVote] = useState<string | null>(null);
 
   useEffect(() => {
     const storedFavorites = window.localStorage.getItem("urlaub-favoriten");
@@ -547,6 +610,30 @@ export default function Home() {
       if (storedVisited) setVisited(JSON.parse(storedVisited));
     }, 0);
     return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    void fetch("/api/votes", { cache: "no-store", signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("votes unavailable");
+        return response.json() as Promise<{ votes: { tripId: string; voter: Voter; vote: VoteValue }[] }>;
+      })
+      .then((data) => {
+        const nextVotes: VoteState = {};
+        for (const item of data.votes) {
+          nextVotes[item.tripId] = { ...nextVotes[item.tripId], [item.voter]: item.vote };
+        }
+        setVotes(nextVotes);
+        setVoteStatus("ready");
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        setVoteStatus("error");
+      });
+
+    return () => controller.abort();
   }, []);
 
   function openIdea(id: string) {
@@ -572,7 +659,46 @@ export default function Home() {
     });
   }
 
+  async function castVote(tripId: string, voter: Voter, vote: VoteValue) {
+    const previous = votes[tripId]?.[voter];
+    const pendingKey = `${tripId}:${voter}`;
+
+    setPendingVote(pendingKey);
+    setVoteStatus("ready");
+    setVotes((current) => ({
+      ...current,
+      [tripId]: { ...current[tripId], [voter]: vote },
+    }));
+
+    try {
+      const response = await fetch("/api/votes", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tripId, voter, vote }),
+      });
+      if (!response.ok) throw new Error("vote not saved");
+    } catch {
+      setVotes((current) => ({
+        ...current,
+        [tripId]: { ...current[tripId], [voter]: previous },
+      }));
+      setVoteStatus("error");
+    } finally {
+      setPendingVote(null);
+    }
+  }
+
   const visitedDestinations = visited.filter((id) => trips.some((trip) => trip.id === id)).length;
+  const completedVotes = trips.filter((trip) => votes[trip.id]?.me && votes[trip.id]?.wife).length;
+  const sharedFavorites = trips
+    .map((trip) => {
+      const tripVotes = votes[trip.id];
+      if (!tripVotes?.me || !tripVotes.wife || tripVotes.me === "no" || tripVotes.wife === "no") return null;
+      const score = (tripVotes.me === "yes" ? 2 : 1) + (tripVotes.wife === "yes" ? 2 : 1);
+      return { trip, score, label: score === 4 ? "Volltreffer" : score === 3 ? "Guter Kandidat" : "Vielleicht" };
+    })
+    .filter((item): item is { trip: Trip; score: number; label: string } => item !== null)
+    .sort((a, b) => b.score - a.score || Number(a.trip.number) - Number(b.trip.number));
 
   return (
     <main>
@@ -617,6 +743,36 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="wishlist-section" aria-labelledby="wishlist-title">
+        <div className="wishlist-heading">
+          <div>
+            <p className="eyebrow">Eure gemeinsame Auswahl</p>
+            <h2 id="wishlist-title">Gemeinsame Wunschliste.</h2>
+            <p>Stimmt unabhängig mit 👍, 🤷 oder 👎 ab. Ziele ohne Gegenstimme erscheinen automatisch hier.</p>
+          </div>
+          <span>{completedVotes} von 13 gemeinsam bewertet</span>
+        </div>
+        {sharedFavorites.length ? (
+          <div className="wishlist-matches">
+            {sharedFavorites.map(({ trip, label, score }) => (
+              <button type="button" key={trip.id} onClick={() => openIdea(trip.id)}>
+                <span>{trip.number}</span>
+                <div><strong>{trip.title}</strong><small>{label} · {score === 4 ? "👍 + 👍" : score === 3 ? "👍 + 🤷" : "🤷 + 🤷"}</small></div>
+                <i aria-hidden="true">→</i>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="wishlist-empty">
+            <span aria-hidden="true">👍</span>
+            <p><b>Noch keine gemeinsame Auswahl.</b> Sobald ihr beide ein Ziel bewertet habt und niemand 👎 wählt, erscheint es hier.</p>
+          </div>
+        )}
+        <p className={`vote-sync-status ${voteStatus}`} aria-live="polite">
+          {voteStatus === "loading" ? "Gemeinsame Stimmen werden geladen …" : voteStatus === "error" ? "Die gemeinsame Abstimmung ist gerade nicht erreichbar. Bitte später noch einmal versuchen." : "Stimmen werden automatisch auf dem gemeinsamen Link gespeichert."}
+        </p>
+      </section>
+
       <section className="all-ideas" aria-labelledby="all-ideas-title">
         <div className="all-ideas-header">
           <div>
@@ -644,6 +800,7 @@ export default function Home() {
                   </div>
                   <ReviewScores trip={trip} compact />
                 </button>
+                <VotePanel trip={trip} votes={votes[trip.id] ?? {}} pendingVote={pendingVote} onVote={castVote} compact />
                 <button
                   className={`visit-toggle compact ${isVisited ? "visited" : ""}`}
                   type="button"
@@ -732,6 +889,7 @@ export default function Home() {
                         </a>
                       </div>
                       <ReviewScores trip={trip} />
+                      <VotePanel trip={trip} votes={votes[trip.id] ?? {}} pendingVote={pendingVote} onVote={castVote} />
                       <p className="rhythm"><b>So fließt der Tag</b>{trip.rhythm}</p>
                       <button className="details-button" type="button" onClick={() => setOpenTrip(isOpen ? null : trip.id)} aria-expanded={isOpen}>
                         {isOpen ? "Tagesplan schließen" : "Tagesplan öffnen"}<span aria-hidden="true">{isOpen ? "−" : "+"}</span>
