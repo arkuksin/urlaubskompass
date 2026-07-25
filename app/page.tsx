@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-
-type ChoiceKey = "weather" | "mood" | "range";
+import { useEffect, useState } from "react";
+import DestinationMap, { type MapPlace } from "./DestinationMap";
 
 type PlatformRating = {
   score: string;
@@ -363,6 +362,66 @@ const trips: Trip[] = [
     note: "Der Familienpass gilt für zwei Erwachsene und bis zu fünf Kinder von 4–12 Jahren; einzelne Termine können ausgenommen sein.",
     officialUrl: "https://provins.net/le-pass-provins/",
   },
+  {
+    id: "reims",
+    number: "12",
+    title: "Königsstadt Reims",
+    region: "Reims · Kathedrale & Stadtspaziergang",
+    image: "/activities/reims.webp",
+    imageAlt: "Familie mit Stadtplan vor der Kathedrale Notre-Dame de Reims",
+    weather: ["sun", "dry", "mixed"],
+    mood: ["calm", "discover"],
+    range: ["full"],
+    distance: "1 Std. 7 Min. · 104 km ab Ferienhaus",
+    cost: "Grundprogramm kostenlos · Maut/Parken extra",
+    mapQuery: "Cathédrale Notre-Dame de Reims, Place du Cardinal Luçon, 51100 Reims, France",
+    reviews: {
+      subject: "Kathedrale Notre-Dame de Reims",
+      google: { score: "4,8", count: "29.192", url: googleMapsSearch("Cathédrale Notre-Dame de Reims") },
+      tripadvisor: { score: "4,6", count: "7.889", url: "https://www.tripadvisor.com/Attraction_Review-g187137-d230790-Reviews-Cathedrale_Notre_Dame_de_Reims-Reims_Marne_Grand_Est.html" },
+    },
+    summary: "Eine kompakte Stadtentdeckung rund um die gewaltige Krönungskathedrale, historische Plätze und eine entspannte Pause im Grünen.",
+    rhythm: "Kathedrale → Altstadt → Picknick → Porte de Mars",
+    plan: [
+      { time: "Vormittag", title: "Die Kathedrale entdecken", text: "Die Fassade gemeinsam nach Engeln, Königen und kleinen Details absuchen und anschließend die farbigen Fenster im Inneren ansehen." },
+      { time: "Mittag", title: "Durch die Innenstadt", text: "Über Place Royale und Place Drouet-d’Erlon schlendern und unterwegs picknicken oder in einer Bäckerei einkehren." },
+      { time: "Nachmittag", title: "Römische Spuren", text: "Zu den Halles du Boulingrin und zur Porte de Mars laufen; kleine Suchaufgaben halten den Stadtweg für Kinder lebendig." },
+      { time: "Ausklang", title: "Grüne Pause", text: "In den Hautes Promenades spielen und ausruhen, bevor es zurück zum Ferienhaus geht." },
+    ],
+    pack: "Bequeme Schuhe, Wasser, kleiner Stadtplan, Sonnenschutz",
+    note: "Die Kathedrale ist frei zugänglich; Gottesdienste und Sonderveranstaltungen können den Besuch beeinflussen.",
+    officialUrl: "https://www.cathedrale-reims.fr/",
+  },
+  {
+    id: "paris",
+    number: "13",
+    title: "Paris & Eiffelturm",
+    region: "Paris · großer Tagesausflug",
+    image: "/activities/paris.webp",
+    imageAlt: "Familie blickt von den Trocadéro-Gärten auf den Eiffelturm",
+    weather: ["sun", "dry", "mixed"],
+    mood: ["active", "discover"],
+    range: ["full"],
+    distance: "2 Std. 25 Min. · 202 km ab Ferienhaus",
+    cost: "Stadtprogramm kostenlos · Maut/Parken/Metro extra",
+    mapQuery: "Tour Eiffel, 5 Avenue Anatole France, 75007 Paris, France",
+    reviews: {
+      subject: "Eiffelturm",
+      google: { score: "4,7", count: "483.204", url: googleMapsSearch("Tour Eiffel Paris") },
+      tripadvisor: { score: "4,6", count: "143.986", url: "https://www.tripadvisor.com/Attraction_Review-g187147-d188151-Reviews-Eiffel_Tower-Paris_Ile_de_France.html" },
+    },
+    summary: "Der weiteste Ausflug – dafür ein ganzer Paris-Tag mit Eiffelturm, Seine und genau einer überschaubaren Stadtroute.",
+    rhythm: "Früh los → Trocadéro → Seine → Tuilerien → heim",
+    plan: [
+      { time: "Früh", title: "Entspannt hinein", text: "Sehr früh starten und außerhalb des Zentrums parken; für die letzten Kilometer Metro oder RER nutzen." },
+      { time: "Vormittag", title: "Der große Blick", text: "Vom Trocadéro zum Eiffelturm gehen, Fotos machen und die Größe direkt unter der Konstruktion erleben." },
+      { time: "Mittag", title: "An der Seine", text: "Am Fluss picknicken und anschließend eine einzige, gut machbare Strecke Richtung Place de la Concorde wählen." },
+      { time: "Nachmittag", title: "Tuilerien statt To-do-Liste", text: "Im Jardin des Tuileries Pause machen, Karussell oder Spielplatz mitnehmen und rechtzeitig die Rückfahrt beginnen." },
+    ],
+    pack: "Sehr bequeme Schuhe, Wasser, Snacks, leichte Jacke, geladene Fahrkarten-App",
+    note: "Google Maps zeigte am 25.07.2026 rund 2½ Stunden pro Strecke bei normalem Verkehr. Paris nur mit frühem Start und großzügigem Rückfahrtpuffer planen.",
+    officialUrl: "https://www.toureiffel.paris/de",
+  },
 ];
 
 const stopover: Trip = {
@@ -396,53 +455,54 @@ const stopover: Trip = {
   officialUrl: "https://citadelle.namur.be/",
 };
 
-const questions: { key: ChoiceKey; kicker: string; title: string; hint: string; options: { value: string; label: string; detail: string }[] }[] = [
-  {
-    key: "weather",
-    kicker: "Schritt 1 · Tageslage",
-    title: "Wie sieht es draußen aus?",
-    hint: "Keine Wetter-App nötig – ein Gefühl für den Tag reicht.",
-    options: [
-      { value: "sun", label: "Sonne & warm", detail: "Perfekt für Wasser und lange Tage draußen" },
-      { value: "dry", label: "Trocken, nicht heiß", detail: "Gutes Wander- und Entdeckerwetter" },
-      { value: "mixed", label: "Unbeständig", detail: "Lieber mit flexiblem Plan und Ausweichidee" },
-      { value: "any", label: "Noch völlig offen", detail: "Zeig mir später die breiteste Auswahl" },
-    ],
-  },
-  {
-    key: "mood",
-    kicker: "Schritt 2 · Stimmung",
-    title: "Was braucht ihr heute?",
-    hint: "Wählt die Energie, die wirklich da ist – nicht die, die im Plan stehen sollte.",
-    options: [
-      { value: "calm", label: "Leicht & entspannt", detail: "Wenig Wechsel, viel freie Zeit" },
-      { value: "active", label: "Bewegung & Action", detail: "Klettern, laufen, springen und spielen" },
-      { value: "water", label: "Unbedingt ans Wasser", detail: "Baden, Strand oder AquaPark" },
-      { value: "discover", label: "Entdecken & staunen", detail: "Dörfer, Weinberge und kleine Rallyes" },
-    ],
-  },
-  {
-    key: "range",
-    kicker: "Schritt 3 · Rahmen",
-    title: "Wie groß darf der Tag werden?",
-    hint: "Der Weg gehört zum Urlaub – aber nicht an jedem Tag gleich viel.",
-    options: [
-      { value: "near", label: "Nah & unkompliziert", detail: "Etwa 25 bis 45 Minuten ab Ferienhaus" },
-      { value: "full", label: "Ein richtiger Tagesausflug", detail: "Bis etwa 1½ Stunden Anfahrt" },
-      { value: "any", label: "Entfernung ist egal", detail: "Die Stimmung entscheidet" },
-    ],
-  },
-];
-
-const initialChoices = { weather: "", mood: "", range: "" };
 const holidayHome = "17 Rue du Moulin, 10700 Saint-Remy-sous-Barbuise, France";
 
-function scoreTrip(trip: Trip, choices: typeof initialChoices) {
-  const weather = choices.weather === "any" || trip.weather.includes(choices.weather) ? 4 : 0;
-  const mood = trip.mood.includes(choices.mood) ? 5 : 0;
-  const range = choices.range === "any" || trip.range.includes(choices.range) ? 4 : 0;
-  return weather + mood + range;
-}
+const coordinatesById: Record<string, [number, number]> = {
+  "lac-ruhig": [48.2486804, 4.3336143],
+  "lac-action": [48.2551035, 4.3408905],
+  kletterwald: [48.26382, 4.2958745],
+  riceys: [47.9944982, 4.3657721],
+  avize: [48.9710543, 4.0011324],
+  hautvillers: [49.0830468, 3.9433382],
+  nigloland: [48.2614779, 4.6129127],
+  vaux: [48.1247403, 4.2622246],
+  "espace-faune": [48.2809477, 4.3686851],
+  troyes: [48.298578, 4.0787106],
+  provins: [48.5609345, 3.2811352],
+  reims: [49.253828, 4.0340474],
+  paris: [48.8584011, 2.294499],
+  namur: [50.459349, 4.8614296],
+};
+
+const mapPlaces: MapPlace[] = [
+  {
+    id: "holiday-home",
+    number: "⌂",
+    title: "Ferienwohnung",
+    subtitle: "17 Rue du Moulin · Saint-Remy-sous-Barbuise",
+    coordinates: [48.4837869, 4.1208245],
+    mapQuery: holidayHome,
+    kind: "home",
+  },
+  ...trips.map((trip) => ({
+    id: trip.id,
+    number: trip.number,
+    title: trip.title,
+    subtitle: `${trip.distance.split(" · ")[0]} · ${trip.region}`,
+    coordinates: coordinatesById[trip.id],
+    mapQuery: trip.mapQuery,
+    kind: "destination" as const,
+  })),
+  {
+    id: stopover.id,
+    number: stopover.number,
+    title: "Namur als Reisepause",
+    subtitle: stopover.region,
+    coordinates: coordinatesById.namur,
+    mapQuery: stopover.mapQuery,
+    kind: "stopover",
+  },
+];
 
 function ReviewScores({ trip, compact = false }: { trip: Trip; compact?: boolean }) {
   const platforms = [
@@ -473,45 +533,18 @@ function ReviewScores({ trip, compact = false }: { trip: Trip; compact?: boolean
 }
 
 export default function Home() {
-  const [step, setStep] = useState(0);
-  const [choices, setChoices] = useState(initialChoices);
   const [openTrip, setOpenTrip] = useState<string | null>(null);
-  const [showAll, setShowAll] = useState(false);
   const [saved, setSaved] = useState<string[]>([]);
 
   useEffect(() => {
     const stored = window.localStorage.getItem("urlaub-favoriten");
-    if (stored) setSaved(JSON.parse(stored));
+    if (!stored) return;
+
+    const timer = window.setTimeout(() => setSaved(JSON.parse(stored)), 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
-  const rankedTrips = useMemo(
-    () => [...trips].sort((a, b) => scoreTrip(b, choices) - scoreTrip(a, choices)),
-    [choices],
-  );
-
-  const question = questions[step];
-  const visibleTrips = showAll ? rankedTrips : rankedTrips.slice(0, 3);
-
-  function choose(key: ChoiceKey, value: string) {
-    setChoices((current) => ({ ...current, [key]: value }));
-  }
-
-  function next() {
-    if (step < 2) setStep((current) => current + 1);
-    else setStep(3);
-  }
-
-  function restart() {
-    setChoices(initialChoices);
-    setStep(0);
-    setOpenTrip(null);
-    setShowAll(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
   function openIdea(id: string) {
-    setStep(3);
-    setShowAll(true);
     setOpenTrip(id);
     window.setTimeout(() => {
       document.getElementById(`trip-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -534,7 +567,7 @@ export default function Home() {
           <span>Urlaubskompass</span>
         </a>
         <div className="header-meta">
-          <span>11 Ausflüge + 1 Reisestopp</span>
+          <span>13 Ziele + 1 Reisestopp</span>
           <span className="meta-dot" aria-hidden="true" />
           <span>ab eurem Ferienhaus</span>
         </div>
@@ -542,13 +575,29 @@ export default function Home() {
 
       <section className="hero" id="start">
         <div className="hero-copy">
-          <p className="eyebrow">Champagne · Lac d’Orient · Aube</p>
-          <h1>Was passt <em>heute</em> zu euch?</h1>
-          <p className="hero-intro">Drei kurze Fragen. Danach seht ihr nur die Ausflüge, die sich für diesen Tag wirklich gut anfühlen.</p>
+          <p className="eyebrow">Champagne · Aube · Paris · Namur</p>
+          <h1>Alle Ziele <em>auf einen Blick.</em></h1>
+          <p className="hero-intro">Vom Ferienhaus bis Paris: Die Karte zeigt euch sofort, wo alle Ideen liegen. Darunter findet ihr für jedes Ziel den fertigen Tagesplan.</p>
         </div>
         <div className="sun-orbit" aria-hidden="true">
-          <span className="sun-core">11</span>
-          <span className="orbit-label">echte<br />Tagesausflüge</span>
+          <span className="sun-core">13</span>
+          <span className="orbit-label">Ziele<br />zum Entdecken</span>
+        </div>
+      </section>
+
+      <section className="map-section" aria-labelledby="map-title">
+        <div className="map-heading">
+          <div>
+            <p className="eyebrow">Die ganze Umgebung</p>
+            <h2 id="map-title">Euer Urlaub auf der Karte.</h2>
+          </div>
+          <p>Auf einen Marker tippen, um Ziel, Fahrzeit und Route zu sehen. Die Karte lässt sich verschieben und zoomen.</p>
+        </div>
+        <DestinationMap places={mapPlaces} />
+        <div className="map-legend" aria-label="Kartenlegende">
+          <span><i className="legend-home">⌂</i> Ferienwohnung</span>
+          <span><i className="legend-destination">01</i> Ziel</span>
+          <span><i className="legend-stopover">→</i> Reisestopp Namur</span>
         </div>
       </section>
 
@@ -556,9 +605,9 @@ export default function Home() {
         <div className="all-ideas-header">
           <div>
             <p className="eyebrow">Direkter Einstieg</p>
-            <h2 id="all-ideas-title">Alle elf Ausflüge</h2>
+            <h2 id="all-ideas-title">Alle dreizehn Ziele</h2>
           </div>
-          <p>Schon entschieden? Springt direkt zum Tagesplan. Alle Fahrzeiten starten an eurem Ferienhaus in Saint-Remy-sous-Barbuise.</p>
+          <p>Tippt auf ein Ziel und springt direkt zum Tagesplan. Alle Fahrzeiten starten an eurem Ferienhaus in Saint-Remy-sous-Barbuise.</p>
         </div>
         <div className="idea-links">
           {trips.map((trip) => (
@@ -579,69 +628,26 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="planner-shell" aria-live="polite">
-        <div className="progress-row">
-          <span>{step < 3 ? `0${step + 1}` : "✓"}</span>
-          <div className="progress-track" aria-label={`Planung ${Math.min(step + 1, 3)} von 3`}>
-            <i style={{ width: `${step >= 3 ? 100 : ((step + 1) / 3) * 100}%` }} />
-          </div>
-          <span>{step < 3 ? "03" : "bereit"}</span>
-        </div>
-
-        {step < 3 && question ? (
-          <div className="question-panel" key={question.key}>
-            <div className="question-copy">
-              <p className="eyebrow">{question.kicker}</p>
-              <h2>{question.title}</h2>
-              <p>{question.hint}</p>
-            </div>
-            <div className="option-grid" role="radiogroup" aria-label={question.title}>
-              {question.options.map((option, index) => {
-                const selected = choices[question.key] === option.value;
-                return (
-                  <button
-                    className={`option-card ${selected ? "selected" : ""}`}
-                    key={option.value}
-                    type="button"
-                    role="radio"
-                    aria-checked={selected}
-                    onClick={() => choose(question.key, option.value)}
-                  >
-                    <span className="option-number">0{index + 1}</span>
-                    <strong>{option.label}</strong>
-                    <small>{option.detail}</small>
-                    <span className="option-check" aria-hidden="true">{selected ? "✓" : "→"}</span>
-                  </button>
-                );
-              })}
-            </div>
-            <div className="planner-actions">
-              {step > 0 ? <button className="text-button" type="button" onClick={() => setStep((current) => current - 1)}>← Zurück</button> : <span />}
-              <button className="primary-button" type="button" disabled={!choices[question.key]} onClick={next}>
-                {step === 2 ? "Meine Ideen zeigen" : "Weiter"}<span aria-hidden="true">→</span>
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="results-panel">
+      <section className="planner-shell" aria-labelledby="destinations-title">
+          <div className="results-panel destinations-panel">
             <div className="results-heading">
               <div>
-                <p className="eyebrow">Eure Auswahl für heute</p>
-                <h2>Das passt am besten.</h2>
-                <p>Die Reihenfolge verbindet Wetter, Stimmung und euren Tagesrahmen.</p>
+                <p className="eyebrow">Ziele & fertige Tagespläne</p>
+                <h2 id="destinations-title">Einfach ein Ziel aussuchen.</h2>
+                <p>Keine Fragen, kein Ranking: Hier stehen alle Ziele in derselben Reihenfolge wie auf der Karte.</p>
               </div>
-              <button className="text-button restart" type="button" onClick={restart}>Auswahl ändern ↺</button>
+              <span className="saved-count">{saved.length ? `${saved.length} Favorit${saved.length > 1 ? "en" : ""} gemerkt` : "♡ Favoriten auf diesem Gerät merken"}</span>
             </div>
 
             <div className="trip-list">
-              {visibleTrips.map((trip, index) => {
+              {trips.map((trip) => {
                 const isOpen = openTrip === trip.id;
                 const isSaved = saved.includes(trip.id);
                 return (
-                  <article className={`trip-card ${index === 0 ? "top-match" : ""}`} key={trip.id} id={`trip-${trip.id}`}>
+                  <article className="trip-card" key={trip.id} id={`trip-${trip.id}`}>
                     <div className="trip-index">
                       <span>{trip.number}</span>
-                      <small>{index === 0 ? "Beste Idee" : index < 3 ? "Passt gut" : "Weitere Idee"}</small>
+                      <small>Ziel</small>
                     </div>
                     <div className="trip-main">
                       <div className="trip-title-row">
@@ -710,18 +716,11 @@ export default function Home() {
               })}
             </div>
 
-            <div className="show-all-row">
-              <button className="secondary-button" type="button" onClick={() => setShowAll((current) => !current)}>
-                {showAll ? "Nur Top 3 anzeigen" : "Alle 11 Ausflüge ansehen"}
-              </button>
-              <span>{saved.length ? `${saved.length} Favorit${saved.length > 1 ? "en" : ""} gemerkt` : "Noch nichts gemerkt"}</span>
-            </div>
           </div>
-        )}
       </section>
 
       <section className="stopover-section" aria-labelledby="stopover-title">
-        <div className="stopover-label">Unterwegs-Option · nicht im Ausflugsranking</div>
+        <div className="stopover-label">Reisestopp · kein Ausflug ab Ferienhaus</div>
         <div className="stopover-grid">
           <div className="stopover-intro">
             <div className="stopover-image"><img src={stopover.image} alt={stopover.imageAlt} loading="lazy" /></div>
@@ -759,7 +758,7 @@ export default function Home() {
       <section className="footer-note">
         <p className="eyebrow">Ein kleiner Urlaubsgrundsatz</p>
         <blockquote>„Eine schöne Hauptidee und genug Zeit zum Treibenlassen.“</blockquote>
-        <p>Sechs Ausflüge und der Reisestopp basieren auf euren Urlaubsunterlagen; fünf weitere Ausflüge wurden passend ergänzt. Fahrzeiten sowie Google- und Tripadvisor-Bewertungen wurden am 24.07.2026 geprüft und können sich ändern. Kosten und Öffnungszeiten bitte kurz vor der Abfahrt prüfen.</p>
+        <p>Dreizehn Ziele und der Namur-Reisestopp sind jetzt gemeinsam auf der Karte sichtbar. Die Angaben basieren auf euren Urlaubsunterlagen und ergänzender Recherche. Fahrzeiten sowie Google- und Tripadvisor-Bewertungen wurden am 24./25.07.2026 geprüft und können sich ändern. Kosten und Öffnungszeiten bitte kurz vor der Abfahrt prüfen.</p>
       </section>
     </main>
   );
