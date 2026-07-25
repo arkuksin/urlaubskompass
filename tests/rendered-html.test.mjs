@@ -24,8 +24,11 @@ test("renders the Urlaubskompass product shell", async () => {
   const html = await response.text();
   const pageSource = await readFile(new URL("app/page.tsx", templateRoot), "utf8");
   const votesApiSource = await readFile(new URL("app/api/votes/route.ts", templateRoot), "utf8");
+  const planApiSource = await readFile(new URL("app/api/plan/route.ts", templateRoot), "utf8");
+  const plannerSource = await readFile(new URL("app/VacationPlanner.tsx", templateRoot), "utf8");
   const hostingConfig = JSON.parse(await readFile(new URL(".openai/hosting.json", templateRoot), "utf8"));
   const votesMigration = await readFile(new URL("drizzle/0000_odd_red_skull.sql", templateRoot), "utf8");
+  const planMigration = await readFile(new URL("drizzle/0001_conscious_wasp.sql", templateRoot), "utf8");
   const activityImages = await readdir(new URL("public/activities/", templateRoot));
   assert.match(html, /<html[^>]+lang="de"/i);
   assert.match(html, /Urlaubskompass/);
@@ -51,6 +54,14 @@ test("renders the Urlaubskompass product shell", async () => {
   assert.match(pageSource, /Volltreffer/);
   assert.match(votesApiSource, /ON CONFLICT/);
   assert.match(votesMigration, /CREATE TABLE `destination_votes`/);
+  assert.match(html, /Den ganzen Urlaub planen/);
+  assert.match(html, /Erster Urlaubstag/);
+  assert.match(plannerSource, /Urlaubstag/);
+  assert.match(plannerSource, /Aktivität auswählen/);
+  assert.match(planApiSource, /setPeriod/);
+  assert.match(planApiSource, /trip_schedule/);
+  assert.match(planMigration, /CREATE TABLE `vacation_settings`/);
+  assert.match(planMigration, /CREATE TABLE `trip_schedule`/);
   assert.equal(hostingConfig.d1, "DB");
   assert.match(pageSource, /Bewertungen für/);
   assert.match(pageSource, /Tripadvisor/);

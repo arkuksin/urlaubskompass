@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import DestinationMap, { type MapPlace } from "./DestinationMap";
+import VacationPlanner from "./VacationPlanner";
 
 type PlatformRating = {
   score: string;
@@ -772,6 +773,8 @@ export default function Home() {
           {voteStatus === "loading" ? "Gemeinsame Stimmen werden geladen …" : voteStatus === "error" ? "Die gemeinsame Abstimmung ist gerade nicht erreichbar. Bitte später noch einmal versuchen." : "Stimmen werden automatisch auf dem gemeinsamen Link gespeichert."}
         </p>
       </section>
+
+      <VacationPlanner trips={trips} onOpenTrip={openIdea} />
 
       <section className="all-ideas" aria-labelledby="all-ideas-title">
         <div className="all-ideas-header">
